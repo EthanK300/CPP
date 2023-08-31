@@ -6,7 +6,11 @@ Author: Ethan Kusse
 8/31/2023
 
 Guessing game: pick a number and it tells you if you are too high or too low, then asks if you want to play again when you win.
-
+Rules:
+1: no global variables
+2: no strings
+3: include iostream not stdio
+4: no using mouse
  */
 
 int main(){
