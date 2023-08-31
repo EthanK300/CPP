@@ -1,0 +1,10 @@
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+int main()
+{
+  chat input[80];
+  cin.get(str, 80);
+  cout << str << endl;
+}
