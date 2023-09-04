@@ -1,7 +1,17 @@
 #include <iostream>
 
+using namespace std;
+
 int main()
 {
-  std::cout << "something";
+  int input = 0;
+  cin >> input;
+  if(input == 3){
+    cout << "you put in a 3" << input;
+  }else if(input == 4){
+    cout << "you put in a 4";
+  }else{
+    cout << "you put in something else";
+  }
+  return 0;
 }
-
