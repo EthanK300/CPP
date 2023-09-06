@@ -2,11 +2,6 @@
 #include <cstring>
 using namespace std;
 
-/*
-Author: Ethan K,
-TicTacToe, with the console as a UI @ input service
- */
-
 bool checkWin(char intake[3][3]);
 
 const char XMOVE = 'X';
@@ -15,21 +10,30 @@ const char BLANK = '-';
 
 int main(){
   bool playing = true;
+  bool valid = false;
   char turn = 'X';
   cout << "This is the board." << endl;
   char board[3][3] = {{BLANK,BLANK,BLANK},{BLANK,BLANK,BLANK},{BLANK,BLANK,BLANK}};
-  char guess[2];
+  char guess[3];
   
   while(playing){
-    cout << endl << board[0][0] << " " << board[0][1] << " " << board[0][2]
-	 << endl << board[1][0] << " " << board[1][1] << " " << board[1][2]
-	 << endl << board[2][0] << " " << board[2][1] << " " << board[2][2] << endl;
+    cout << endl << "  A B C" << endl << "A " << board[0][0] << " " << board[0][1] << " " << board[0][2]
+	 << endl << "B " << board[1][0] << " " << board[1][1] << " " << board[1][2]
+	 << endl << "C " << board[2][0] << " " << board[2][1] << " " << board[2][2] << endl;
     cout << "It is player " << turn << "'s turn." << endl;
+    
+    while(!valid){
+      cout << "Enter a letter followed by a number for position: ";
+      cin.clear();
+      cin >> guess;
+      cin.ignore(10000, '\n');
+      if(isalpha(guess[0]) && isalpha(guess[1])){
+        valid = true;
+      }
+    }
+    valid = false;
 
-  TODO:" ASK GALBRAITH ABOUT THIS: ";
-    cin.clear();
-    cin.ignore();
-    cin >> guess;
+    cout << guess << " Nice." << endl;
     
   }
 }
