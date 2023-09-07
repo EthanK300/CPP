@@ -34,7 +34,38 @@ int main(){
     valid = false;
 
     cout << guess << " Nice." << endl;
-    
+    int x = 0;
+    int y = 0;
+    str
+    if(guess[0] == 'a'){
+      x = 0;
+    }else if(guess[0] == 'b'){
+      x = 1;
+    }else if(guess[0] == 'c'){
+      x = 2;
+    }else{
+      cout << "Error.";
+      return 0;
+    }
+    if(guess[1] == 'a'){
+      y = 0;
+    }else if(guess[1] == 'b'){
+      y = 1;
+    }else if(guess[1] == 'c'){
+      y = 2;
+    }else{
+      cout << "Error.";
+      return 0;
+    }
+    board[x][y] = turn;
+    if(turn == XMOVE){
+      turn = OMOVE;
+    }else if(turn == OMOVE){
+      turn = XMOVE;
+    }else{
+      cout << "Error";
+      return 0;
+    }
   }
 }
 
