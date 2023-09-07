@@ -2,10 +2,12 @@
 using namespace std;
 int main()
 {
-  char input[] = "hellothere12345";
-  memmove(input, input+1, strlen(input));
-  cout << input;
-
+  int var = 0;
+  int* varPtr = &var;
+  cout << var << endl;
+  *varPtr = 1;
+  cout << var << endl;
+  
   
   return 0;
 }
