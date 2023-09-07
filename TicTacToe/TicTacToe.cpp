@@ -2,6 +2,12 @@
 #include <cstring>
 using namespace std;
 
+/*
+Author: Ethan K
+TicTacToe
+Uses the console for UI and input
+ */
+
 int checkWin(char intake[3][3]);
 bool checkTie(char intake[3][3]);
 
@@ -21,8 +27,10 @@ int main(){
   char guess[3];
   int x = 0;
   int y = 0;
+  //initialized all neccesary variables
   
   while(playing){
+    //main game loop
     cout << endl << "  1 2 3" << endl << "A " << board[0][0] << " " << board[0][1] << " " << board[0][2]
 	 << endl << "B " << board[1][0] << " " << board[1][1] << " " << board[1][2]
 	 << endl << "C " << board[2][0] << " " << board[2][1] << " " << board[2][2] << endl;
@@ -55,9 +63,11 @@ int main(){
       }
       turn = 'X';
     }
+    //after checking for wins and ties, start new game and record scores
     cout << "It is player " << turn << "'s turn." << endl;
     
     while(!valid){
+      //parsing for correct input
       cout << "Enter a number followed by a letter for an open position: ";
       cin.clear();
       cin >> guess;
@@ -91,8 +101,8 @@ int main(){
       }
     }
     valid = false;
-
     
+    //once acquired a good input, stick it on the board
     board[x][y] = turn;
     if(turn == XMOVE){
       turn = OMOVE;
@@ -105,6 +115,7 @@ int main(){
   }
 }
 
+//function to check for ties
 bool checkTie(char intake[3][3]){
   for(int i = 0; i < strlen(intake[0]); i++){
     for(int j = 0; j < strlen(intake[0]); j++){
@@ -117,6 +128,7 @@ bool checkTie(char intake[3][3]){
   return true;
 }
 
+//returns 1 if X won and 0 if O won
 int checkWin(char intake[3][3]){
   //columns
   if(intake[0][0] == XMOVE && intake[0][1] == XMOVE && intake[0][2] == XMOVE){
