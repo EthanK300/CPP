@@ -22,7 +22,7 @@ int main(){
   while(playAgain == 'y'){
     number = rand();
     number %= 100;
-    guess = 0;
+    numGuesses = 0;
     cout << "Guess a number between 1 and 100" << endl;
     while (guess != number) {
       cin.clear();
