@@ -53,11 +53,29 @@ int main(){
 }
 
 void ADD(vector<Student*>* intakeList){
+	cout << "Enter student first name: " << endl;
+	cin.clear();
+	cin.ignore();
+	cin >> firstNameIN;
+	cout << "Enter student last name: " << endl;
+	cin.clear();
+	cin.ignore();
+	cin >> lastNameIN;
+	cout << "Enter student ID: " << endl;
+	cin.clear();
+	cin.ignore();
+	cin >> studentIDIN;
+	cout << "Enter student GPA: " << endl;
+	cin.clear();
+	cin.ignore();
+	cin >> gpaIN;
+	
   Student* student = new Student();
   student->firstName = firstNameIN;
   student->lastName = lastNameIN;
   student->studentID = studentIDIN;
   student->gpa = gpaIN;
+	intakeList.push_back(student);
 }
 
 void PRINT(vector<Student*>* intakeList){
@@ -67,8 +85,18 @@ void PRINT(vector<Student*>* intakeList){
 }
 
 void DELETE(vector<Student*>* intakeList){
+  int intake = 0;
   for(vector<Student*> iterator it = StudentList->begin(); it != StudentList->end(); ++it){
-    cout << (*it)->firstName  << ", " << (*it)->lastName << ", ID: " << (*it)->studentID << ", GPA: " << (*it)->gpa << endl;
+    cout << it << ". " << (*it)->firstName  << ", " << (*it)->lastName << ", ID: " << (*it)->studentID << ", GPA: " << (*it)->gpa << endl;
   }
+  cout << "Select index of student to remove: " << endl;
+  cin.ignore();
+	cin.clear();
+	cin << intake;
+	for(vector<Student*> iterator it = StudentList->begin(); it != StudentList->end(); ++it){
+		if(intake == it){
+			vector.erase(it);
+		}
+	}
 }
 
