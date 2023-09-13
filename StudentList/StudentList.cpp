@@ -15,88 +15,95 @@ struct Student {
   float gpa = 0;
 };
 
+//predefined functions
 void ADD(vector<Student*>* StudentList);
 void PRINT(vector<Student*>* StudentList);
 void DELETE(vector<Student*>* StudentList);
 
 int main(){
-  vector<Student> StudentList;
+  vector<Student*>* StudentList = new vector<Student*>();
   char terminal[80];
   bool active = true;
+  //main running loop
   while(active){
-      cout << "Enter a command: " << endl;
-
-      cin.ignore();
-      cin.clear();
-      cin >> terminal;
-    
-      for(int i = 0; i < strlen(terminal) - 1; i++){
-	if(!isalpha(terminal[i])){
-	  memmove(terminal+i, terminal+1+i, strlen(terminal)-i);
-	  i--;
-	}
+    cout << "Enter a command: " << endl;
+    cin.clear();
+    cin >> terminal;
+    for(int i = 0; i < strlen(terminal); i++){
+      if(!isalpha(terminal[i])){
+	memmove(terminal+i, terminal+1+i, strlen(terminal)-i);
+	i--;
       }
-      //good command string
-      if(terminal == "ADD"){
-	ADD(StudentList);
-      }else if(terminal == "PRINT"){
-	PRINT(StudentList);
-      }else if(terminal == "DELETE"){
-	DELETE(StudentList);
-      }else if(terminal == "QUIT"){
-	return 0;
-      }else{
-	cout << "Bad Input" << endl;
-      }
+    }
+    //good command string
+    if(!strcmp(terminal, "ADD")){
+      ADD(StudentList);
+    }else if(!strcmp(terminal, "PRINT")){
+      PRINT(StudentList);
+    }else if(!strcmp(terminal, "DELETE")){
+      DELETE(StudentList);
+    }else if(!strcmp(terminal, "QUIT")){
+      return 0;
+    }else{
+      cout << "Bad Input" << endl;
     }
   }
 }
-
+//add function - gets all of the data then adds it to the vector of students
 void ADD(vector<Student*>* intakeList){
-	cout << "Enter student first name: " << endl;
-	cin.clear();
-	cin.ignore();
-	cin >> firstNameIN;
-	cout << "Enter student last name: " << endl;
-	cin.clear();
-	cin.ignore();
-	cin >> lastNameIN;
-	cout << "Enter student ID: " << endl;
-	cin.clear();
-	cin.ignore();
-	cin >> studentIDIN;
-	cout << "Enter student GPA: " << endl;
-	cin.clear();
-	cin.ignore();
-	cin >> gpaIN;
-	
+  char firstNameIN[80];
+  char lastNameIN[80];
+  int studentIDIN = 0;
+  float gpaIN = 0;
+  
+  cout << "Enter student first name: " << endl;
+  cin.clear();
+  cin >> firstNameIN;
+  cin.ignore();
+  cout << "Enter student last name: " << endl;
+  cin.clear();
+  cin >> lastNameIN;
+  cin.ignore();
+  cout << "Enter student ID: " << endl;
+  cin.clear();
+  cin >> studentIDIN;
+  cin.ignore();
+  cout << "Enter student GPA: " << endl;
+  cin.clear();
+  cin >> gpaIN;
+  cin.ignore();
+  
   Student* student = new Student();
-  student->firstName = firstNameIN;
-  student->lastName = lastNameIN;
+  strcpy(student->firstName, firstNameIN);
+  strcpy(student->lastName, lastNameIN);
   student->studentID = studentIDIN;
   student->gpa = gpaIN;
-	intakeList.push_back(student);
+  intakeList->push_back(student);
 }
-
+//print function - prints all students listed in the vector, and "no students" if there are none
 void PRINT(vector<Student*>* intakeList){
-  for(vector<Student*> iterator it = StudentList->begin(); it != StudentList->end(); ++it){
+  cout << "Students: " << endl;
+  for(vector<Student*>::iterator it = intakeList->begin(); it != intakeList->end(); ++it){
     cout << (*it)->firstName  << ", " << (*it)->lastName << ", ID: " << (*it)->studentID << ", GPA: " << (*it)->gpa << endl;
   }
+  if(intakeList->empty()){
+    cout << "No students." << endl;
+  }
 }
-
+//removes a student using ID number for selection
 void DELETE(vector<Student*>* intakeList){
   int intake = 0;
-  for(vector<Student*> iterator it = StudentList->begin(); it != StudentList->end(); ++it){
-    cout << it << ". " << (*it)->firstName  << ", " << (*it)->lastName << ", ID: " << (*it)->studentID << ", GPA: " << (*it)->gpa << endl;
-  }
-  cout << "Select index of student to remove: " << endl;
+  PRINT(intakeList);
+  cout << "Enter student ID of student to remove: " << endl;
   cin.ignore();
-	cin.clear();
-	cin << intake;
-	for(vector<Student*> iterator it = StudentList->begin(); it != StudentList->end(); ++it){
-		if(intake == it){
-			vector.erase(it);
-		}
-	}
+  cin.clear();
+  cin >> intake;
+  for(vector<Student*>::iterator it = intakeList->begin(); it != intakeList->end(); ++it){
+    if((*it)->studentID == intake){
+      intakeList->erase(it);
+      break;
+    }
+  }
+  PRINT(intakeList);
+  
 }
-
