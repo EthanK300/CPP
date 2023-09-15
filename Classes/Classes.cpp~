@@ -1,0 +1,15 @@
+#include <iostream>
+#include <vector>
+#include "Media.h"
+#include "Movies.h"
+#include "Music.h"
+#include "VideoGames.h"
+
+
+
+using namespace std;
+
+
+int main(){
+  vector<Media>
+}
