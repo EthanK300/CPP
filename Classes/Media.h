@@ -1,5 +1,5 @@
 #ifndef MEDIA
-#define
+#define MEDIA
 
 #include <iostream>
 using namespace std;
@@ -12,7 +12,7 @@ public:
 protected:
   int id;
   int year;
-  char[80] title;
+  char title[80];
 };
 
 #endif
