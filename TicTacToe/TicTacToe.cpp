@@ -35,7 +35,7 @@ int main(){
 	 << endl << "B " << board[1][0] << " " << board[1][1] << " " << board[1][2]
 	 << endl << "C " << board[2][0] << " " << board[2][1] << " " << board[2][2] << endl;
     if(checkWin(board) == 0){
-      scoreX++;
+      scoreO++;
       cout << "X Score: " << scoreX << ", O Score: " << scoreO << " , Ties: " << ties << ", New Game!" << endl; 
       for(int x = 0; x < 3; x++){
 	for(int y = 0; y < 3; y++){
