@@ -16,6 +16,7 @@ const char OMOVE = 'O';
 const char BLANK = '-';
 
 int main(){
+  char terminal[80];
   int scoreO = 0;
   int scoreX = 0;
   int ties = 0;
@@ -110,6 +111,14 @@ int main(){
       turn = XMOVE;
     }else{
       cout << "Error";
+      return 0;
+    }
+    cout << "Continue? y/n" << endl;
+    cin.clear();
+    cin >> terminal;
+    if(!strcmp(terminal, 'y')){
+      playing = true;	
+    }else{
       return 0;
     }
   }
