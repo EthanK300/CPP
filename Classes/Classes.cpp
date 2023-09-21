@@ -74,7 +74,25 @@ void ADD(vector<Media*>* database){
 }
 
 void DELETE(vector<Media*>* database){
-
+  while(active){
+    cout << "Search for title or year? (t/y)" << endl;
+    cin.clear();
+    cin >> terminal;
+    for(int i = 0; i < strlen(terminal); i++){
+      if(!isalpha(terminal[i])){
+        memmove(terminal+i, terminal+1+i, strlen(terminal)-i);
+        i--;
+      }
+    }
+    for(vector<Media*>::iterator it = database->begin(); it != database->end(); ++it){
+      if(!strcmp(terminal, *it->getTitle())){
+	  (*it)
+          active = false;
+      }else{
+        cout << "Bad Input" << endl;
+      }
+    }
+  }
 }
 
 void SEARCH(vector<Media*>* database){
