@@ -7,7 +7,8 @@ using namespace std;
 class Media{
 public:
   Media();
-  char getTitle();
+  char* getTitle();
+  char* getInformation();
   int getYear();
 protected:
   int id;
