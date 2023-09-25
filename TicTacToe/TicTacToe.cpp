@@ -10,13 +10,14 @@ Uses the console for UI and input
 
 int checkWin(char intake[3][3]);
 bool checkTie(char intake[3][3]);
+int playAgain();
 
 const char XMOVE = 'X';
 const char OMOVE = 'O';
 const char BLANK = '-';
 
 int main(){
-  char terminal[80];
+  char terminal[3];
   int scoreO = 0;
   int scoreX = 0;
   int ties = 0;
@@ -44,6 +45,9 @@ int main(){
 	}
       }
       turn = 'X';
+      if(playAgain() == 0){
+	return 0;
+      }
     }else if(checkWin(board) == 1){
       scoreX++;
       cout << "X Score: " << scoreX << ", O Score: " << scoreO << " , Ties: " << ties << ", New Game!" << endl; 
@@ -53,6 +57,9 @@ int main(){
 	}
       }
       turn = 'X';
+      if(playAgain() == 0){
+	return 0;
+      }
     }
     if(checkTie(board)){
       ties++;
@@ -63,6 +70,9 @@ int main(){
 	}
       }
       turn = 'X';
+      if(playAgain() == 0){
+	return 0;
+      }
     }
     //after checking for wins and ties, start new game and record scores
     cout << "It is player " << turn << "'s turn." << endl;
@@ -99,6 +109,7 @@ int main(){
 	}else{
 	  cout << "Space is filled! Pick a different slot." << endl;
 	}
+	strcpy(guess, "");
       }
     }
     valid = false;
@@ -113,14 +124,18 @@ int main(){
       cout << "Error";
       return 0;
     }
-    cout << "Continue? y/n" << endl;
-    cin.clear();
-    cin >> terminal;
-    if(!strcmp(terminal, 'y')){
-      playing = true;	
-    }else{
-      return 0;
-    }
+  }
+}
+//function to check if user wants to play again
+int playAgain(){
+  char terminal[80];
+  cout << "Continue? y/n" << endl;
+  cin.clear();
+  cin >> terminal;
+  if(!strcmp(terminal, "y")){
+    return 1;	
+  }else{
+    return 0;
   }
 }
 
