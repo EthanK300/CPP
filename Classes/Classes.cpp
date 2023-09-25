@@ -93,7 +93,7 @@ void DELETE(vector<Media*>* database){
 	delete *it;
 	database->erase(it);
 	active = false;
-	found = true
+	found = true;
       }
       if(!found){
         cout << "Bad Input, object does not exist" << endl;
@@ -103,5 +103,57 @@ void DELETE(vector<Media*>* database){
 }
 
 void SEARCH(vector<Media*>* database){
-
+  bool active = true;
+  char terminal[80];
+  
+  while(active){
+    cout << "Search for title or year? (t/y)" << endl;
+    cin.clear();
+    cin >> terminal;
+    for(int i = 0; i < strlen(terminal); i++){
+      if(!isalpha(terminal[i])){
+        memmove(terminal+i, terminal+1+i, strlen(terminal)-i);
+        i--;
+      }
+    }
+    if(!strcmp(terminal, "t")){
+      cout << "Enter title:" << endl;
+      cin.ignore(10000, '\n');
+      cin.clear();
+      cin >> terminal;
+      for(vector<Media*>::iterator it = database->begin(); it != database->end(); ++it){
+	bool found = false;
+	if(!strcmp(terminal, (*it)->getTitle())){
+	  //print out information about each object
+	  (*it)->getInformation();
+	  active = false;
+	  found = true;
+	}
+	if(!found){
+	    cout << "This object does not exist!" << endl;
+	}
+      }
+    }else if(!strcmp(terminal, "y")){
+      cout << "Enter year:" << endl;
+      cin.ignore(10000, '\n');
+      cin.clear();
+      cin >> terminal;
+      for(vector<Media*>::iterator it = database->begin(); it != database->end(); ++it){
+	bool found = false;
+	if(atoi(terminal) == ((*it)->getYear())){
+	  //print out information about each object
+	  cout << "Media information: " << endl;
+	  (*it)->getInformation();
+	  active = false;
+	  found = true;
+	}
+	if(!found){
+	    cout << "This object does not exist!" << endl;
+	}
+      }
+    }else{
+      cout << "Bad input." << endl;
+    }
+    
+  }
 }

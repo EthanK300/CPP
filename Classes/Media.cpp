@@ -3,38 +3,35 @@
 #include <cstring>
 using namespace std;
 
-Media(){
-  char yearIN[80];
-  active = true;
-  valid = true ;
+Media::Media(){
+  bool active = true;
+  bool valid = true ;
   cout << "Enter title of media: " << endl;
   cin.clear();
   cin >> title;
-  cin.ignore();
+  cin.ignore(10000, '\n');
 
   while(active){
     cout << "Enter year media was released: " << endl;
     cin.clear();
-    cin >> yearIN;
-    for(int i = 0; i < strlen(yearIN - 1); i++){
-      if(!isdigit(yearIN[i])){
-	valid = false
-      }
-    }
-    if(valid){
-      active = false;
-    }else{
+    cin >> year;
+    if(year == 0){
       active = true;
       cout << "Bad input" << endl;
+    }else{
+      active = false;
     }
   }
-  strcpy(title, yearIN);
 }
 
 char* Media::getTitle(){
   return title;
 }
 
-char* Media::getYear(){
+int Media::getYear(){
   return year;
+}
+
+void Media::getInformation(){
+  return;
 }

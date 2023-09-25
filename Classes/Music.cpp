@@ -5,27 +5,25 @@
 using namespace std;
 
 Music::Music() : Media(){
-  char durationIN[80];
-  active = true;
-  valid = true;
+  int durationIN = 0;
+  bool active = true;
+  bool valid = true;
   
   cout << "Enter artist: " << endl;
   cin.clear();
   cin >> artist;
-  cin.ignore();
+  cin.ignore(10000, '\n');
   cout << "Enter publisher: " << endl;
   cin.clear();
   cin >> publisher;
-  cin.ignore();
+  cin.ignore(10000, '\n');
 
   while(active){
     cout << "Enter the duration of the music: " << endl;
     cin.clear();
     cin >> durationIN;
-    for(int i = 0; i < strlen(durationIN - 1); i++){
-      if(!isdigit(yearIN[i])){
-	valid = false;
-      }
+    if(durationIN == 0){
+      valid = false;
     }
     if(valid){
       active = false;
@@ -34,10 +32,10 @@ Music::Music() : Media(){
       cout << "Bad input" << endl;
     }
   }
-  strcpy(title, yearIN);
+  duration = durationIN;
   
 }
 
-char* Music::getInformation(){
+void Music::getInformation(){
   cout << "Title: " << title << endl << "Year: " << year << endl << "Artist: " << artist << endl << "Publisher: " << publisher << endl << "Duration: " << duration << endl;
 }

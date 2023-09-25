@@ -5,8 +5,10 @@
 
 class VideoGames : public Media{
 public:
+  VideoGames();
   int rating = 0;
   char publisher[80];
+  void getInformation();
 };
 
 #endif

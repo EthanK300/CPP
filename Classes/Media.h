@@ -8,7 +8,7 @@ class Media{
 public:
   Media();
   char* getTitle();
-  char* getInformation();
+  virtual void getInformation();
   int getYear();
 protected:
   int id;
