@@ -37,5 +37,5 @@ Music::Music() : Media(){
 }
 
 void Music::getInformation(){
-  cout << "Title: " << title << endl << "Year: " << year << endl << "Artist: " << artist << endl << "Publisher: " << publisher << endl << "Duration: " << duration << endl;
+  cout << "Title: " << title << ", Year: " << year << ", Artist: " << artist << ", Publisher: " << publisher << ", Duration: " << duration << endl;
 }
