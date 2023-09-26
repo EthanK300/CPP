@@ -2,8 +2,9 @@
 #include "Media.h"
 #include <cstring>
 using namespace std;
-
+//media class
 Media::Media(){
+  //generic data inputter
   bool active = true;
   bool valid = true ;
   cout << "Enter title of media: " << endl;
@@ -23,7 +24,7 @@ Media::Media(){
     }
   }
 }
-
+//getter functions
 char* Media::getTitle(){
   return title;
 }

@@ -8,10 +8,16 @@
 
 using namespace std;
 
+/*
+Author: Ethan K
+Classes - add search and delete media
+
+ */
+//function prototypes
 void ADD(vector<Media*>* database);
 void DELETE(vector<Media*>* database);
 void SEARCH(vector<Media*>* database);
-
+//main
 int main(){
   bool active = true;
   char terminal[80];
@@ -41,7 +47,7 @@ int main(){
     }
   }
 }
-
+//add object, ask for type and data
 void ADD(vector<Media*>* database){
   char terminal[80];
   bool active = true;
@@ -73,7 +79,7 @@ void ADD(vector<Media*>* database){
     }
   }
 }
-
+//delete selected object searching by year or title
 void DELETE(vector<Media*>* database){
   bool active = true;
   char terminal[80];
@@ -148,7 +154,7 @@ void DELETE(vector<Media*>* database){
     }
   }
 }
-
+//search and print out info for selected object, searching by title or year
 void SEARCH(vector<Media*>* database){
   bool active = true;
   char terminal[80];

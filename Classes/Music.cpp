@@ -3,7 +3,7 @@
 #include <cstring>
 
 using namespace std;
-
+//music data inputter
 Music::Music() : Media(){
   int durationIN = 0;
   bool active = true;
@@ -35,7 +35,7 @@ Music::Music() : Media(){
   duration = durationIN;
   
 }
-
+//return information about music object
 void Music::getInformation(){
   cout << "Title: " << title << ", Year: " << year << ", Artist: " << artist << ", Publisher: " << publisher << ", Duration: " << duration << endl;
 }

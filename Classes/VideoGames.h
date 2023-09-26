@@ -2,7 +2,7 @@
 #define VIDOEGAMES
 #include <iostream>
 #include "Media.h"
-
+//videogames structural data
 class VideoGames : public Media{
 public:
   VideoGames();

@@ -3,7 +3,7 @@
 
 #include <iostream>
 using namespace std;
-
+//media class structural data
 class Media{
 public:
   Media();

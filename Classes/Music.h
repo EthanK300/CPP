@@ -2,7 +2,7 @@
 #define MUSIC
 #include <iostream>
 #include "Media.h"
-
+//music structural data
 class Music : public Media{
 public:
   Music();

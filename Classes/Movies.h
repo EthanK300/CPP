@@ -2,7 +2,7 @@
 #define MOVIES
 #include <iostream>
 #include "Media.h"
-
+//movies class structual data
 class Movies : public Media{
 public:
   Movies();

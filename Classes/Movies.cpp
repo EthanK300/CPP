@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Movies.h"
 using namespace std;
-
+//movies class - intake data
 Movies::Movies() : Media(){
   cout << "Enter director name: " << endl;
   cin.clear();
@@ -20,7 +20,7 @@ Movies::Movies() : Media(){
     cin.ignore(10000, '\n');
   }
 }
-
+//return data
 void Movies::getInformation(){
   cout << "Title: " << title << ", Year: " << year << ", Director: " << director << ", Duration: " << duration << ", Rating: " << rating << endl;
   return;

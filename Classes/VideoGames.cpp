@@ -1,7 +1,7 @@
 #include <iostream>
 #include "VideoGames.h"
 using namespace std;
-
+//videogames information inputter
 VideoGames::VideoGames() : Media(){
   cout << "Enter publisher: " << endl;
   cin.clear();
@@ -14,7 +14,7 @@ VideoGames::VideoGames() : Media(){
     cin.ignore(10000, '\n');
   }
 }
-
+//return information about video game object
 void VideoGames::getInformation(){
   cout << "Title: " << title << ", Year: " << year << ", Publisher: " << publisher << ", Rating: " << rating << endl;
   return;
