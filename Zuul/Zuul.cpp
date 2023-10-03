@@ -6,11 +6,16 @@
 
 using namespace std;
 
+bool move();
+bool acquire();
+bool drop();
+
 int main(){
   bool active = true;
   char terminal[80];
-  vector<Room*>* rooms = new vector<Room*>*();
-  cout << "List of commands: ADD, SEARCH, DELETE, QUIT" << endl;
+  vector<Room*>* rooms = new vector<Room*>();
+  vector<Item*>* inventory = new vector<Item*>();
+  cout << "List of commands: MOVE, ACQUIRE, DROP, QUIT" << endl;
   while(active){
     cout << "Enter a command: " << endl;
     cin.clear();
@@ -22,12 +27,12 @@ int main(){
       }
     }
     //good command string
-    if(!strcmp(terminal, "ADD")){
-      ADD(database);
-    }else if(!strcmp(terminal, "DELETE")){
-      DELETE(database);
-    }else if(!strcmp(terminal, "SEARCH")){
-      SEARCH(database);
+    if(!strcmp(terminal, "MOVE")){
+      move();
+    }else if(!strcmp(terminal, "ACQUIRE")){
+      acquire();
+    }else if(!strcmp(terminal, "DROP")){
+      drop();
     }else if(!strcmp(terminal, "QUIT")){
       return 0;
     }else{
@@ -35,4 +40,15 @@ int main(){
     }
   }
 }
+
+bool move(){
+  
+}
+
+bool acquire(){
+
+}
+
+bool drop(){
+
 }
