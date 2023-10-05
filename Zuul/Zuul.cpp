@@ -13,6 +13,7 @@ bool drop();
 int main(){
   bool active = true;
   char terminal[80];
+  Room currentRoom = NULL;
   vector<Room*>* rooms = new vector<Room*>();
   vector<Item*>* inventory = new vector<Item*>();
   cout << "List of commands: MOVE, ACQUIRE, DROP, QUIT" << endl;
