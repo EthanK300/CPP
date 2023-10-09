@@ -8,6 +8,7 @@ class Item{
  public:
   Item();
   char name[80];
+  char* getName();
 };
 
 #endif

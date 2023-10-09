@@ -6,14 +6,15 @@
 
 using namespace std;
 
-bool move();
-bool acquire();
-bool drop();
+bool move(Room* currentRoom, vector<Item*>* inventory);
+bool acquire(Room* currentRoom, vector<Item*>* inventory);
+bool drop(Room* currentRoom, vector<Item*>* inventory);
+bool loadResources(Room* currentRoom);
 
 int main(){
   bool active = true;
   char terminal[80];
-  Room currentRoom = NULL;
+  Room* currentRoom = NULL;
   vector<Room*>* rooms = new vector<Room*>();
   vector<Item*>* inventory = new vector<Item*>();
   cout << "List of commands: MOVE, ACQUIRE, DROP, QUIT" << endl;
@@ -29,11 +30,11 @@ int main(){
     }
     //good command string
     if(!strcmp(terminal, "MOVE")){
-      move();
+      move(currentRoom, inventory);
     }else if(!strcmp(terminal, "ACQUIRE")){
-      acquire();
+      acquire(currentRoom, inventory);
     }else if(!strcmp(terminal, "DROP")){
-      drop();
+      drop(currentRoom, inventory);
     }else if(!strcmp(terminal, "QUIT")){
       return 0;
     }else{
@@ -42,14 +43,50 @@ int main(){
   }
 }
 
-bool move(){
+bool move(Room* currentRoom, vector<Item*>* inventory){
   
 }
 
-bool acquire(){
+bool acquire(Room* currentRoom, vector<Item*>* inventory){
 
 }
 
-bool drop(){
+bool drop(Room* currentRoom, vector<Item*>* inventory){
+  bool valid = true;
+  char terminal[80];
+  cout << "What would you like to drop? Select an item or enter NONE" << endl << "Inventory: " << endl;
+  for(vector<Item*>::iterator it = inventory->begin(); it != inventory->end(); ++it){
+    cout << (*it)->getName() << endl;
+  }
+  while(valid){
+    cin.clear();
+    cin >> terminal;
+    cin.ignore(10000, '\n');
+    for(int i = 0; i < strlen(terminal); i++){
+      if(!isalpha(terminal[i])){
+	memmove(terminal+i, terminal+1+i, strlen(terminal)-i);
+	i--;
+      }
+    }
+    for(vector<Item*>::iterator it = inventory->begin(); it != inventory->end(); ++it){
+      if(!strcmp((*it)->getName(), terminal)){
+	valid = false;
+	currentRoom->addItem((*it));
+	inventory->erase(it);
+	return true;
+      }
+    }
+    if(!strcmp(terminal, "NONE")){
+      cout << "Didn't drop anything" << endl;
+      valid = false;
+      return true;
+    }else{
+      valid = true;
+    }
+    cout << "Bad Input." << endl;
+  }
+}
 
+bool loadResources(){
+  
 }

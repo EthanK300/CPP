@@ -9,3 +9,7 @@ using namespace std;
 Item::Item(){
 
 }
+
+char* Item::getName(){
+  return name;
+}
