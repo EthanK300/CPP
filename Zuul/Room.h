@@ -14,6 +14,7 @@ class Room{
   Room();
   char* getName();
   void listExits();
+  vector<Item*>* getItems();
   void listItems();
   bool removeItem(Item* item);
   bool addItem(Item* item);

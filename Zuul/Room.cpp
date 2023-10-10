@@ -44,3 +44,7 @@ bool Room::addItem(Item* item){
 char* Room::getName(){
   return name;
 }
+
+vector<Item*>* Room::getItems(){
+  return items;
+}
