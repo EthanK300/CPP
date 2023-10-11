@@ -6,10 +6,10 @@
 
 using namespace std;
 
-bool move(Room* currentRoom, vector<Item*>* inventory);
+bool move(Room* currentRoom);
 bool acquire(Room* currentRoom, vector<Item*>* inventory);
 bool drop(Room* currentRoom, vector<Item*>* inventory);
-bool loadResources(Room* currentRoom);
+bool loadResources(vector<Room*>* rooms);
 
 int main(){
   bool active = true;
@@ -17,6 +17,10 @@ int main(){
   Room* currentRoom = NULL;
   vector<Room*>* rooms = new vector<Room*>();
   vector<Item*>* inventory = new vector<Item*>();
+  if(!loadResources(rooms)){
+    cout << "Failed to load resources." << endl;
+    return 1;
+  }
   cout << "List of commands: MOVE, ACQUIRE, DROP, QUIT" << endl;
   while(active){
     cout << "Enter a command: " << endl;
@@ -30,7 +34,7 @@ int main(){
     }
     //good command string
     if(!strcmp(terminal, "MOVE")){
-      move(currentRoom, inventory);
+      move(currentRoom);
     }else if(!strcmp(terminal, "ACQUIRE")){
       acquire(currentRoom, inventory);
     }else if(!strcmp(terminal, "DROP")){
@@ -41,10 +45,38 @@ int main(){
       cout << "Bad Input" << endl;
     }
   }
+  return 0;
 }
 
-bool move(Room* currentRoom, vector<Item*>* inventory){
-  
+bool move(Room* currentRoom){
+  bool valid = true;
+  char terminal[80];
+  currentRoom->listExits();
+  while(valid){
+    cout << "Where to?" << endl;
+    cin.clear();
+    cin >> terminal;
+    for(int i = 0; i < strlen(terminal); i++){
+      if(!isalpha(terminal[i])){
+	memmove(terminal+i, terminal+1+i, strlen(terminal)-i);
+	i--;
+      }
+    }
+    map<char*, Room*>* currentExitMap = currentRoom->getExits();
+    for(map<char*, Room*>::iterator it = currentExitMap->begin(); it != currentExitMap->end(); ++it){
+      if(!strcmp(terminal,(it)->first)){
+	currentRoom = (it)->second;
+	valid = false;
+	return true;
+      }
+    }
+    if(!strcmp(terminal, "QUIT")){
+      cout << "Didn't move anywhere." << endl;
+      valid = true;
+      return true;
+    }
+  }
+  return false;
 }
 
 bool acquire(Room* currentRoom, vector<Item*>* inventory){
@@ -67,9 +99,9 @@ bool acquire(Room* currentRoom, vector<Item*>* inventory){
     for(vector<Item*>::iterator it = currentRoom->getItems()->begin(); it != currentRoom->getItems()->end(); ++it){
       if(!strcmp((*it)->getName(), terminal)){
 	valid = false;
+	cout << "Picked up " << (*it)->getName() << endl;
 	inventory->push_back(*it);
-	currentRoom->removeItem(*it);
-        
+	currentRoom->removeItem(*it);        
 	return true;
       }
     }
@@ -82,6 +114,7 @@ bool acquire(Room* currentRoom, vector<Item*>* inventory){
     }
     cout << "Bad Input." << endl;
   }
+  return false;
 }
 
 bool drop(Room* currentRoom, vector<Item*>* inventory){
@@ -104,6 +137,7 @@ bool drop(Room* currentRoom, vector<Item*>* inventory){
     for(vector<Item*>::iterator it = inventory->begin(); it != inventory->end(); ++it){
       if(!strcmp((*it)->getName(), terminal)){
 	valid = false;
+	cout << "Dropped " << (*it)->getName() << " in " << currentRoom->getName() << endl;
 	currentRoom->addItem((*it));
 	inventory->erase(it);
 	return true;
@@ -118,8 +152,12 @@ bool drop(Room* currentRoom, vector<Item*>* inventory){
     }
     cout << "Bad Input." << endl;
   }
+  return false;
 }
 
-bool loadResources(){
+bool loadResources(vector<Room*>* rooms){
   
+  Room* earth = new Room();
+  
+  currentRoom = earth;
 }

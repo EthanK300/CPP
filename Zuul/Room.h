@@ -11,10 +11,11 @@ using namespace std;
 
 class Room{
  public:
-  Room();
+  Room(vector<Item*>* itemsIN, map<char*, Room*>* exitsIN);
   char* getName();
   void listExits();
   vector<Item*>* getItems();
+  map<char*, Room*>* getExits();
   void listItems();
   bool removeItem(Item* item);
   bool addItem(Item* item);
@@ -22,6 +23,7 @@ class Room{
  protected:
   map<char*, Room*>* exits = new map<char*, Room*>();
   vector<Item*>* items = new vector<Item*>();
+  
 };
 
 #endif

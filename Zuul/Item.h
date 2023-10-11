@@ -6,7 +6,7 @@
 
 class Item{
  public:
-  Item();
+  Item(char* nameIN);
   char name[80];
   char* getName();
 };

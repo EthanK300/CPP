@@ -6,8 +6,8 @@
 
 using namespace std;
 
-Item::Item(){
-
+Item::Item(char* nameIN){
+  strcpy(name, nameIN);
 }
 
 char* Item::getName(){
