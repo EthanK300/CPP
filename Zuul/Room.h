@@ -11,9 +11,10 @@ using namespace std;
 
 class Room{
  public:
-  Room(vector<Item*>* itemsIN, map<char*, Room*>* exitsIN);
+  Room(vector<Item*>* itemsIN);
   char* getName();
   void listExits();
+  bool setExit(char* direction, Room* toRoom);
   vector<Item*>* getItems();
   map<char*, Room*>* getExits();
   void listItems();

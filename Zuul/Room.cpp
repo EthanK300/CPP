@@ -6,13 +6,15 @@
 
 using namespace std;
 
-Room::Room(vector<Item*>* itemsIN, map<char*, Room*>* roomsIN){
+Room::Room(vector<Item*>* itemsIN){
   for(vector<Item*>::iterator it = itemsIN->begin(); it != itemsIN->end(); ++it){
     items->push_back((*it));
   }
-  for(map<Room*>::iterator it = roomsIN->begin(); it != roomsIN->end(); ++it){
-    exits->push_back();
-  }
+}
+
+bool Room::setExit(char* direction, Room* toRoom){
+  exits->insert(pair<char*,Room*>(direction,toRoom));
+  return true;
 }
 
 void Room::listExits(){

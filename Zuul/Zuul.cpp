@@ -9,7 +9,8 @@ using namespace std;
 bool move(Room* currentRoom);
 bool acquire(Room* currentRoom, vector<Item*>* inventory);
 bool drop(Room* currentRoom, vector<Item*>* inventory);
-bool loadResources(vector<Room*>* rooms);
+bool loadResources(vector<Room*>* rooms, Room* currentRoom);
+bool openMap(vector<Room*>* listRooms);
 
 int main(){
   bool active = true;
@@ -17,7 +18,7 @@ int main(){
   Room* currentRoom = NULL;
   vector<Room*>* rooms = new vector<Room*>();
   vector<Item*>* inventory = new vector<Item*>();
-  if(!loadResources(rooms)){
+  if(!loadResources(rooms, currentRoom)){
     cout << "Failed to load resources." << endl;
     return 1;
   }
@@ -39,6 +40,8 @@ int main(){
       acquire(currentRoom, inventory);
     }else if(!strcmp(terminal, "DROP")){
       drop(currentRoom, inventory);
+    }else if(!strcmp(terminal, "MAP")){
+      openMap(rooms);
     }else if(!strcmp(terminal, "QUIT")){
       return 0;
     }else{
@@ -46,6 +49,9 @@ int main(){
     }
   }
   return 0;
+}
+bool openMap(vector<Room*>* listRooms){
+  
 }
 
 bool move(Room* currentRoom){
@@ -155,9 +161,20 @@ bool drop(Room* currentRoom, vector<Item*>* inventory){
   return false;
 }
 
-bool loadResources(vector<Room*>* rooms){
+bool loadResources(vector<Room*>* rooms, Room* currentRoom){
+  char name[80];
+  char exit[80];
   
-  Room* earth = new Room();
+  strcpy(name, "note");
+  Item* note = new Item(name);
+  strcpy(name, "fuel");
+  Item* fuel = new Item(name);
   
+  Room* earth = new Room(new vector<Item*>{note});
+  Room* space = new Room(new vector<Item*>{});
+
+  strcpy(exit, "rocket_pad");
+  earth->setExit(exit, space);
   currentRoom = earth;
+  return true;
 }
