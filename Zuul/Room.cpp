@@ -6,10 +6,11 @@
 
 using namespace std;
 
-Room::Room(vector<Item*>* itemsIN){
+Room::Room(vector<Item*>* itemsIN, char* nameIN){
   for(vector<Item*>::iterator it = itemsIN->begin(); it != itemsIN->end(); ++it){
     items->push_back((*it));
   }
+  strcpy(name, nameIN);
 }
 
 bool Room::setExit(char* direction, Room* toRoom){

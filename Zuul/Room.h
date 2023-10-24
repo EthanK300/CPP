@@ -11,7 +11,7 @@ using namespace std;
 
 class Room{
  public:
-  Room(vector<Item*>* itemsIN);
+  Room(vector<Item*>* itemsIN, char* nameIN);
   char* getName();
   void listExits();
   bool setExit(char* direction, Room* toRoom);

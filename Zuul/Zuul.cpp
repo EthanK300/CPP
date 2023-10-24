@@ -22,7 +22,10 @@ int main(){
     cout << "Failed to load resources." << endl;
     return 1;
   }
-  cout << "List of commands: MOVE, ACQUIRE, DROP, QUIT" << endl;
+  for(vector<Room*>::iterator it = rooms->begin(); it != rooms->end(); ++it){
+    (*it)->listExits();
+  }
+  cout << "List of commands: MOVE, MAP, ACQUIRE, DROP, QUIT" << endl;
   while(active){
     cout << "Enter a command: " << endl;
     cin.clear();
@@ -50,8 +53,14 @@ int main(){
   }
   return 0;
 }
-bool openMap(vector<Room*>* listRooms){
-  
+bool openMap(vector<Room*>* roomsIN){
+  cout << "exits to" << endl;
+  for(vector<Room*>::iterator it = roomsIN->begin(); it != roomsIN->end(); ++it){
+    cout << "Room " << (*it)->getName() << " exits to: ";
+    (*it)->listExits();
+    cout << endl;
+  }
+  return true;
 }
 
 bool move(Room* currentRoom){
@@ -162,19 +171,27 @@ bool drop(Room* currentRoom, vector<Item*>* inventory){
 }
 
 bool loadResources(vector<Room*>* rooms, Room* currentRoom){
-  char name[80];
-  char exit[80];
-  
+  char* name = new char[80];
+  char* exit = new char[80];
+
+  //create items
   strcpy(name, "note");
   Item* note = new Item(name);
   strcpy(name, "fuel");
   Item* fuel = new Item(name);
-  
-  Room* earth = new Room(new vector<Item*>{note});
-  Room* space = new Room(new vector<Item*>{});
+  strcpy(name, "earth");
 
+
+  //create rooms
+  Room* earth = new Room(new vector<Item*>{note}, name);
+  strcpy(name, "space");
+  Room* space = new Room(new vector<Item*>{}, name);
+
+  //set exits
   strcpy(exit, "rocket_pad");
   earth->setExit(exit, space);
   currentRoom = earth;
+  rooms->push_back(earth);
+  rooms->push_back(space);
   return true;
 }
