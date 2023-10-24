@@ -190,8 +190,9 @@ bool loadResources(vector<Room*>* rooms, Room* currentRoom){
   //set exits
   strcpy(exit, "rocket_pad");
   earth->setExit(exit, space);
-  currentRoom = earth;
   rooms->push_back(earth);
   rooms->push_back(space);
+
+  currentRoom = earth;
   return true;
 }
