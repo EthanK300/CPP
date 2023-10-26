@@ -31,7 +31,6 @@ void Room::listItems(){
 bool Room::removeItem(Item* item){
   for(vector<Item*>::iterator it = items->begin(); it != items->end(); ++it){
     if(!strcmp((*it)->getName(), item->getName())){
-      delete *it;
       items->erase(it);
       return true;
     }else{

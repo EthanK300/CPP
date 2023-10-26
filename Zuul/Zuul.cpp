@@ -8,8 +8,9 @@ using namespace std;
 
 bool move(Room* currentRoom);
 bool acquire(Room* currentRoom, vector<Item*>* inventory);
+bool listInventory(vector<Item*>* inventory);
 bool drop(Room* currentRoom, vector<Item*>* inventory);
-bool loadResources(vector<Room*>* rooms, Room* currentRoom);
+bool loadResources(vector<Room*>* rooms, Room* &currentRoom);
 bool openMap(vector<Room*>* listRooms);
 
 int main(){
@@ -22,7 +23,7 @@ int main(){
     cout << "Failed to load resources." << endl;
     return 1;
   }
-  cout << "List of commands: MOVE, MAP, ACQUIRE, DROP, QUIT" << endl;
+  cout << "List of commands: MOVE, MAP, ACQUIRE, DROP, INV, QUIT" << endl;
   while(active){
     cout << "Enter a command: " << endl;
     cin.clear();
@@ -42,6 +43,8 @@ int main(){
       drop(currentRoom, inventory);
     }else if(!strcmp(terminal, "MAP")){
       openMap(rooms);
+    }else if(!strcmp(terminal, "INV")){
+      listInventory(inventory);
     }else if(!strcmp(terminal, "QUIT")){
       return 0;
     }else{
@@ -51,9 +54,8 @@ int main(){
   return 0;
 }
 bool openMap(vector<Room*>* roomsIN){
-  cout << "exits to" << endl;
   for(vector<Room*>::iterator it = roomsIN->begin(); it != roomsIN->end(); ++it){
-    cout << "Room " << (*it)->getName() << " exits to: ";
+    cout << "Room " << (*it)->getName() << " exits to: " << endl;
     (*it)->listExits();
     cout << endl;
   }
@@ -127,6 +129,14 @@ bool acquire(Room* currentRoom, vector<Item*>* inventory){
   return false;
 }
 
+bool listInventory(vector<Item*>* inventory){
+  cout << "Items in inventory: " << endl;
+  for(vector<Item*>::iterator it = inventory->begin(); it != inventory->end(); ++it){
+    cout << (*it)->getName() << endl;
+  }
+  return true;
+}
+
 bool drop(Room* currentRoom, vector<Item*>* inventory){
   bool valid = true;
   char terminal[80];
@@ -165,7 +175,7 @@ bool drop(Room* currentRoom, vector<Item*>* inventory){
   return false;
 }
 
-bool loadResources(vector<Room*>* rooms, Room* currentRoom){
+bool loadResources(vector<Room*>* rooms, Room* &currentRoom){
   char* name = new char[80];
   char* exit = new char[80];
   
@@ -176,23 +186,41 @@ bool loadResources(vector<Room*>* rooms, Room* currentRoom){
   Item* fuel = new Item(name);
   strcpy(name, "energycells");
   Item* energycells = new Item(name);
+  strcpy(name, "controlchip");
+  Item* controlchip = new Item(name);
+  strcpy(name, "toolbox");
+  Item* toolbox = new Item(name);
   
   //create rooms
   strcpy(name, "earth");
   Room* earth = new Room(name);
-  strcpy(name, "space");
+  strcpy(name, "outer space");
   Room* space = new Room(name);
-
+  strcpy(name, "spaceship");
+  Room* spaceship = new Room(name);
+  strcpy(name, "moon");
+  Room* moon = new Room(name);
+  
   //set exits
   strcpy(exit, "rocket_pad");
-  earth->setExit(exit, space);
-  rooms->push_back(earth);
-  rooms->push_back(space);
+  earth->setExit(exit, spaceship);
+  spaceship->setExit(exit, earth);
+  strcpy(exit, "fly to: moon landing port");
+  spaceship->setExit(exit, moon);
+  strcpy(exit, "landing port");
+  moon->setExit(exit, spaceship);
 
   //add items to rooms
   earth->addItem(fuel);
   earth->addItem(note);
   earth->addItem(energycells);
+  moon->addItem(controlchip);
+  spaceship->addItem(toolbox);
+  
+  //add rooms to operatable list
+  rooms->push_back(moon);
+  rooms->push_back(earth);
+  rooms->push_back(spaceship);
   
   currentRoom = earth;
   return true;
