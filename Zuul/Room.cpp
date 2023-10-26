@@ -6,10 +6,7 @@
 
 using namespace std;
 
-Room::Room(vector<Item*>* itemsIN, char* nameIN){
-  for(vector<Item*>::iterator it = itemsIN->begin(); it != itemsIN->end(); ++it){
-    items->push_back((*it));
-  }
+Room::Room(char* nameIN){
   strcpy(name, nameIN);
 }
 
