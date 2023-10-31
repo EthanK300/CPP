@@ -16,7 +16,6 @@ bool Room::setExit(char* direction, Room* toRoom){
 }
 
 void Room::listExits(){
-  cout << "Exits: " << endl;
   for(map<char*, Room*>::iterator it = exits->begin(); it != exits->end(); ++it){
     cout << "Exit direction: " << it->first << " To room: " << it->second->name << endl;
   }

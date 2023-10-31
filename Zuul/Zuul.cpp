@@ -55,7 +55,7 @@ int main(){
 }
 bool openMap(vector<Room*>* roomsIN){
   for(vector<Room*>::iterator it = roomsIN->begin(); it != roomsIN->end(); ++it){
-    cout << "Room " << (*it)->getName() << " exits to: " << endl;
+    cout << (*it)->getName() << " exits to: " << endl;
     (*it)->listExits();
     cout << endl;
   }
@@ -69,9 +69,9 @@ bool move(Room* currentRoom){
   while(valid){
     cout << "Where to?" << endl;
     cin.clear();
-    cin >> terminal;
+    cin.getline(terminal, 80);
     for(int i = 0; i < strlen(terminal); i++){
-      if(!isalpha(terminal[i])){
+      if(!isalpha(terminal[i]) && !(terminal[i] == ' ')){
 	memmove(terminal+i, terminal+1+i, strlen(terminal)-i);
 	i--;
       }
@@ -176,50 +176,117 @@ bool drop(Room* currentRoom, vector<Item*>* inventory){
 }
 
 bool loadResources(vector<Room*>* rooms, Room* &currentRoom){
-  char* name = new char[80];
-  char* exit = new char[80];
-  
   //create items
-  strcpy(name, "note");
-  Item* note = new Item(name);
-  strcpy(name, "fuel");
-  Item* fuel = new Item(name);
-  strcpy(name, "energycells");
-  Item* energycells = new Item(name);
-  strcpy(name, "controlchip");
-  Item* controlchip = new Item(name);
-  strcpy(name, "toolbox");
-  Item* toolbox = new Item(name);
+  char* note1 = new char[80];
+  strcpy(note1, "note");
+  Item* note = new Item(note1);
+  
+  char* fuel1 = new char[80];
+  strcpy(fuel1, "fuel");
+  Item* fuel = new Item(fuel1);
+
+  char* energycells1 = new char[80];
+  strcpy(energycells1, "energycells");
+  Item* energycells = new Item(energycells1);
+
+  char* controlchip1 = new char[80];
+  strcpy(controlchip1, "controlchip");
+  Item* controlchip = new Item(controlchip1);
+  
+  char* toolbox1 = new char[80];
+  strcpy(toolbox1, "toolbox");
+  Item* toolbox = new Item(toolbox1);
+
+  char* passenger1 = new char[80];
+  strcpy(passenger1, "passenger");
+  Item* passenger = new Item(passenger1);
+
+  char* bubbletea1 = new char[80];
+  strcpy(bubbletea1, "bubbletea");
+  Item* bubbletea = new Item(bubbletea1);
+
+  char* tiramisu1 = new char[80];
+  strcpy(tiramisu1, "tiramisu");
+  Item* tiramisu = new Item(tiramisu1);
   
   //create rooms
-  strcpy(name, "earth");
-  Room* earth = new Room(name);
-  strcpy(name, "outer space");
-  Room* space = new Room(name);
-  strcpy(name, "spaceship");
-  Room* spaceship = new Room(name);
-  strcpy(name, "moon");
-  Room* moon = new Room(name);
+  char* earth1 = new char[80];
+  strcpy(earth1, "earth");
+  Room* earth = new Room(earth1);
+  
+  char* outerspace1 = new char[80];
+  strcpy(outerspace1, "outer space");
+  Room* space = new Room(outerspace1);
+
+  char* spaceship1 = new char[80];
+  strcpy(spaceship1, "spaceship");
+  Room* spaceship = new Room(spaceship1);
+
+  char* moon1 = new char[80];
+  strcpy(moon1, "moon");
+  Room* moon = new Room(moon1);
+
+  char* theSun1 = new char[80];
+  strcpy(theSun1, "the sun");
+  Room* theSun = new Room(theSun1);
+
+  char* tradeHub1 = new char[80];
+  strcpy(tradeHub1, "interstellar trade hub");
+  Room* tradeHub = new Room(tradeHub1);
+
+  char* moonStation1 = new char[80];
+  strcpy(moonStation1, "moon mining station");
+  Room* moonStation = new Room(moonStation1);
   
   //set exits
-  strcpy(exit, "rocket_pad");
-  earth->setExit(exit, spaceship);
-  spaceship->setExit(exit, earth);
-  strcpy(exit, "fly to: moon landing port");
-  spaceship->setExit(exit, moon);
-  strcpy(exit, "landing port");
-  moon->setExit(exit, spaceship);
+  char* rocketpad1 = new char[80];
+  strcpy(rocketpad1, "rocket pad");
+  earth->setExit(rocketpad1, spaceship);
+  spaceship->setExit(rocketpad1, earth);
 
+  char* flyMLP = new char[80];
+  strcpy(flyMLP, "fly to: moon landing port");
+  spaceship->setExit(flyMLP, moon);
+
+  char* lp1 = new char[80];
+  strcpy(lp1, "landing port");
+  moon->setExit(lp1, spaceship);
+
+  char* flyTS = new char[80];
+  strcpy(flyTS, "fly to: the sun");
+  spaceship->setExit(flyTS, theSun);
+  
+  char* flyTH = new char[80];
+  strcpy(flyTH, "fly to: trade hub");
+  spaceship->setExit(flyTH, tradeHub);
+
+  char* lp2 = new char[80];
+  strcpy(lp2, "landing port");
+  tradeHub->setExit(lp2, spaceship);
+
+  char* flyMMS = new char[80];
+  strcpy(flyMMS, "fly to: moon mining station");
+  spaceship->setExit(flyMMS, moonStation);
+
+  char* lp3 = new char[80];
+  strcpy(lp3, "landing port");
+  moonStation->setExit(lp3, spaceship);
+  
   //add items to rooms
   earth->addItem(fuel);
   earth->addItem(note);
   earth->addItem(energycells);
   moon->addItem(controlchip);
   spaceship->addItem(toolbox);
+  tradeHub->addItem(bubbletea);
+  tradeHub->addItem(tiramisu);
   
   //add rooms to operatable list
   rooms->push_back(moon);
   rooms->push_back(earth);
+  rooms->push_back(theSun);
+  rooms->push_back(tradeHub);
+  rooms->push_back(moonStation);
   rooms->push_back(spaceship);
   
   currentRoom = earth;
