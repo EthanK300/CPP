@@ -237,8 +237,70 @@ bool loadResources(vector<Room*>* rooms, Room* &currentRoom){
   char* moonStation1 = new char[80];
   strcpy(moonStation1, "moon mining station");
   Room* moonStation = new Room(moonStation1);
+
+  char* refinery1 = new char[80];
+  strcpy(refinery1, "refinery");
+  Room* refinery = new Room(refinery1);
+
+  char* recyclingplant1 = new char[80];
+  strcpy(recyclingplant1, "recycling plant");
+  Room* recyclingplant = new Room(recyclingplant1);
+
+  char* warpgate1 = new char[80];
+  strcpy(warpgate1, "warp gate");
+  Room* warpgate = new Room(warpgate1);
+
+  char* cosmicanomaly1 = new char[80];
+  strcpy(cosmicanomaly1, "cosmic anomaly");
+  Room* cosmicanomaly = new Room(cosmicanomaly1);
+
+  char* shipwreck1 = new char[80];
+  strcpy(shipwreck1, "shipwreck");
+  Room* shipwreck = new Room(shipwreck1);
+
+  char* timewarpportal1 = new char[80];
+  strcpy(timewarpportal1, "time warp portal");
+  Room* timewarpportal = new Room(timewarpportal1);
+
+  char* weaponsplant1 = new char[80];
+  strcpy(weaponsplant1, "weapons plant");
+  Room* weaponsplant = new Room(weaponsplant1);
+
+  char* spacefortress1 = new char[80];
+  strcpy(spacefortress1, "space fortress");
+  Room* spacefortress = new Room(spacefortress1);
+
+  char* blackhole1 = new char[80];
+  strcpy(blackhole1, "black hole");
+  Room* blackhole = new Room(blackhole1);
+
+  char* wormhole1 = new char[80];
+  strcpy(wormhole1, "worm hole");
+  Room* wormhole = new Room(wormhole1);
+
   
   //set exits
+
+  char* flyWH = new char[80];
+  strcpy(flyWH, "fly to: wormhole entrance");
+  spaceship->setExit(flyWH, wormhole);
+
+  char* flyBH = new char[80];
+  strcpy(flyBH, "fly to: black hole entrance");
+  spaceship->setExit(flyBH, blackhole);
+
+  char* flySF = new char[80];
+  strcpy(flySF, "fly to: force field of space fortress");
+  spaceship->setExit(flySF, moon);
+
+  char* flyWP = new char[80];
+  strcpy(flyWP, "fly to: weapons plant");
+  spaceship->setExit(flyWP, weaponsplant);
+
+  char* flyTWP = new char[80];
+  strcpy(flyTWP, "fly to: time warp portal");
+  spaceship->setExit(flyTWP, timewarpportal);
+  
   char* rocketpad1 = new char[80];
   strcpy(rocketpad1, "rocket pad");
   earth->setExit(rocketpad1, spaceship);
@@ -260,6 +322,22 @@ bool loadResources(vector<Room*>* rooms, Room* &currentRoom){
   strcpy(flyTH, "fly to: trade hub");
   spaceship->setExit(flyTH, tradeHub);
 
+  char* flyR = new char[80];
+  strcpy(flyR, "fly to: refinery");
+  spaceship->setExit(flyR, refinery);
+
+  char* flyRP = new char[80];
+  strcpy(flyRP, "fly to: recyclingplant");
+  spaceship->setExit(flyRP, recyclingplant);
+
+  char* flyWG = new char[80];
+  strcpy(flyWG, "fly to: landing port");
+  spaceship->setExit(flyWG, warpgate);
+
+  char* flyCA = new char[80];
+  strcpy(flyCA, "fly to: gaseous cloud");
+  spaceship->setExit(flyCA, cosmicanomaly);
+  
   char* lp2 = new char[80];
   strcpy(lp2, "landing port");
   tradeHub->setExit(lp2, spaceship);
@@ -271,6 +349,22 @@ bool loadResources(vector<Room*>* rooms, Room* &currentRoom){
   char* lp3 = new char[80];
   strcpy(lp3, "landing port");
   moonStation->setExit(lp3, spaceship);
+
+  char* lp4 = new char[80];
+  strcpy(lp4, "landing port");
+  refinery->setExit(lp4, spaceship);
+
+  char* lp5 = new char[80];
+  strcpy(lp5, "landing port");
+  recyclingplant->setExit(lp5, spaceship);
+
+  char* lp6 = new char[80];
+  strcpy(lp6, "landing port");
+  warpgate->setExit(lp6, spaceship);
+
+  char* lp7 = new char[80];
+  strcpy(lp7, "gaseous cloud");
+  cosmicanomaly->setExit(lp7, spaceship);
   
   //add items to rooms
   earth->addItem(fuel);
@@ -282,12 +376,22 @@ bool loadResources(vector<Room*>* rooms, Room* &currentRoom){
   tradeHub->addItem(tiramisu);
   
   //add rooms to operatable list
+  rooms->push_back(recyclingplant);
+  rooms->push_back(warpgate);
+  rooms->push_back(refinery);
+  rooms->push_back(cosmicanomaly);
   rooms->push_back(moon);
   rooms->push_back(earth);
   rooms->push_back(theSun);
   rooms->push_back(tradeHub);
   rooms->push_back(moonStation);
+  rooms->push_back(blackhole);
+  rooms->push_back(shipwreck);
+  rooms->push_back(timewarpportal);
+  rooms->push_back(spacefortress);
+  rooms->push_back(weaponsplant);
   rooms->push_back(spaceship);
+  rooms->push_back(wormhole);
   
   currentRoom = earth;
   return true;
