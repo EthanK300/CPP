@@ -6,6 +6,8 @@
 
 using namespace std;
 
+//Author: Ethan K, zuul project but space themed...
+
 bool loadResources(vector<Room*>* &rooms, Room* &currentRoom);
 bool move(Room* &currentRoom);
 bool acquire(Room* &currentRoom, vector<Item*>* &inventory);
@@ -16,7 +18,7 @@ void checkIfWon(Room* &currentRoom, vector<Item*>* &inventory, vector<Room*>* &r
 bool contains(vector<Room*>* &rooms, char* roomName, char* name);
 bool contains(vector<Item*>* &inventory, char* name);
 
-
+//main running loop
 int main(){
   bool active = true;
   char terminal[80];
@@ -58,6 +60,7 @@ int main(){
   }
   return 0;
 }
+//prints out connections of rooms
 bool openMap(vector<Room*>* &roomsIN){
   for(vector<Room*>::iterator it = roomsIN->begin(); it != roomsIN->end(); ++it){
     cout << (*it)->getName() << " exits to: " << endl;
@@ -66,7 +69,7 @@ bool openMap(vector<Room*>* &roomsIN){
   }
   return true;
 }
-
+//check winning conditions, runs each time after commands
 void checkIfWon(Room* &currentRoom, vector<Item*>* &inventory, vector<Room*>* &rooms){
   char* winRoom = new char[80];
   strcpy(winRoom, "spaceship");
@@ -86,7 +89,7 @@ void checkIfWon(Room* &currentRoom, vector<Item*>* &inventory, vector<Room*>* &r
   }
   return;
 }
-
+//helper function for check win
 bool contains(vector<Room*>* &rooms, char* roomName, char* name){
   for(vector<Room*>::iterator it = rooms->begin(); it != rooms->end(); ++it){
     if(strcmp((*it)->getName(), roomName) == 0){
@@ -99,7 +102,7 @@ bool contains(vector<Room*>* &rooms, char* roomName, char* name){
   }
   return false;
 }
-
+//overloaded helper function
 bool contains(vector<Item*>* &inventory, char*name){
   for(vector<Item*>::iterator it = inventory->begin(); it != inventory->end(); ++it){
     if(strcmp((*it)->getName(), name) == 0){
@@ -108,7 +111,7 @@ bool contains(vector<Item*>* &inventory, char*name){
   }
   return false;
 }
-
+//move somewhere
 bool move(Room* &currentRoom){
   bool valid = true;
   char terminal[80];
@@ -142,7 +145,7 @@ bool move(Room* &currentRoom){
   }
   return false;
 }
-
+//pick up something
 bool acquire(Room* &currentRoom, vector<Item*>* &inventory){
   bool valid = true;
   char terminal[80];
@@ -180,7 +183,7 @@ bool acquire(Room* &currentRoom, vector<Item*>* &inventory){
   }
   return false;
 }
-
+//list out inventory items
 bool listInventory(vector<Item*>* &inventory){
   cout << "Items in inventory: " << endl;
   for(vector<Item*>::iterator it = inventory->begin(); it != inventory->end(); ++it){
@@ -188,7 +191,7 @@ bool listInventory(vector<Item*>* &inventory){
   }
   return true;
 }
-
+//drop item in current room
 bool drop(Room* &currentRoom, vector<Item*>* &inventory){
   bool valid = true;
   char terminal[80];
@@ -226,7 +229,7 @@ bool drop(Room* &currentRoom, vector<Item*>* &inventory){
   }
   return false;
 }
-
+//load everything
 bool loadResources(vector<Room*>* &rooms, Room* &currentRoom){
   //create items
   char* note1 = new char[80];
