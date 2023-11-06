@@ -12,6 +12,10 @@ bool acquire(Room* &currentRoom, vector<Item*>* &inventory);
 bool listInventory(vector<Item*>* &inventory);
 bool drop(Room* &currentRoom, vector<Item*>* &inventory);
 bool openMap(vector<Room*>* &listRooms);
+void checkIfWon(Room* &currentRoom, vector<Item*>* &inventory, vector<Room*>* &rooms);
+bool contains(vector<Room*>* &rooms, char* roomName, char* name);
+bool contains(vector<Item*>* &inventory, char* name);
+
 
 int main(){
   bool active = true;
@@ -25,6 +29,7 @@ int main(){
   }
   cout << "List of commands: MOVE, MAP, ACQUIRE, DROP, INV, QUIT" << endl;
   while(active){
+    checkIfWon(currentRoom, inventory, rooms);
     cout << "Enter a command: " << endl;
     cin.clear();
     cin >> terminal;
@@ -60,6 +65,48 @@ bool openMap(vector<Room*>* &roomsIN){
     cout << endl;
   }
   return true;
+}
+
+void checkIfWon(Room* &currentRoom, vector<Item*>* &inventory, vector<Room*>* &rooms){
+  char* winRoom = new char[80];
+  strcpy(winRoom, "spaceship");
+  if(strcmp(currentRoom->getName(), winRoom) == 0){
+    char* bubbleTeaT = new char[80];
+    strcpy(bubbleTeaT, "bubbletea");
+    char* fuelT = new char[80];
+    strcpy(fuelT, "fuel");
+    char* spaceshipT = new char[80];
+    strcpy(spaceshipT, "spaceship");
+    if(contains(inventory, bubbleTeaT) && contains(rooms, spaceshipT, fuelT)){
+      //win!
+      cout << "You Won!" << endl;
+      exit(0);
+      return;
+    }
+  }
+  return;
+}
+
+bool contains(vector<Room*>* &rooms, char* roomName, char* name){
+  for(vector<Room*>::iterator it = rooms->begin(); it != rooms->end(); ++it){
+    if(strcmp((*it)->getName(), roomName) == 0){
+      for(vector<Item*>::iterator it2 = (*it)->getItems()->begin(); it2 != (*it)->getItems()->end(); ++it2){
+	if(strcmp((*it2)->getName(), name) == 0){
+	  return true;
+	}
+      }
+    }
+  }
+  return false;
+}
+
+bool contains(vector<Item*>* &inventory, char*name){
+  for(vector<Item*>::iterator it = inventory->begin(); it != inventory->end(); ++it){
+    if(strcmp((*it)->getName(), name) == 0){
+      return true;
+    }
+  }
+  return false;
 }
 
 bool move(Room* &currentRoom){
@@ -107,14 +154,12 @@ bool acquire(Room* &currentRoom, vector<Item*>* &inventory){
     cin.clear();
     cin >> terminal;
     cin.ignore(10000, '\n');
-    cout << terminal << "fffff" << endl;
     for(int i = 0; i < strlen(terminal); i++){
       if(!isalpha(terminal[i])){
 	memmove(terminal+i, terminal+1+i, strlen(terminal)-i);
 	i--;
       }
     }
-    cout << terminal << "ggggg" << endl;
     for(vector<Item*>::iterator it = currentRoom->getItems()->begin(); it != currentRoom->getItems()->end(); ++it){
       if(!strcmp((*it)->getName(), terminal)){
 	valid = false;
