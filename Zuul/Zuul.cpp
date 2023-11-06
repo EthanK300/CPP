@@ -91,6 +91,7 @@ bool move(Room* &currentRoom){
       valid = true;
       return true;
     }
+    cout << "Bad input." << endl;
   }
   return false;
 }
@@ -100,22 +101,26 @@ bool acquire(Room* &currentRoom, vector<Item*>* &inventory){
   char terminal[80];
   cout << "Items in room: " << endl;
   currentRoom->listItems();
+  cin.get();
   while(valid){
+    cout << "What to acquire?" << endl;
     cin.clear();
     cin >> terminal;
     cin.ignore(10000, '\n');
+    cout << terminal << "fffff" << endl;
     for(int i = 0; i < strlen(terminal); i++){
       if(!isalpha(terminal[i])){
 	memmove(terminal+i, terminal+1+i, strlen(terminal)-i);
 	i--;
       }
     }
+    cout << terminal << "ggggg" << endl;
     for(vector<Item*>::iterator it = currentRoom->getItems()->begin(); it != currentRoom->getItems()->end(); ++it){
       if(!strcmp((*it)->getName(), terminal)){
 	valid = false;
 	cout << "Picked up " << (*it)->getName() << endl;
 	inventory->push_back(*it);
-	currentRoom->removeItem(*it);        
+	currentRoom->removeItem(*it);
 	return true;
       }
     }

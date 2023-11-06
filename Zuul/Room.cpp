@@ -29,7 +29,7 @@ void Room::listItems(){
 
 bool Room::removeItem(Item* item){
   for(vector<Item*>::iterator it = items->begin(); it != items->end(); ++it){
-    if(!strcmp((*it)->getName(), item->getName())){
+    if(strcmp((*it)->getName(), item->getName()) == 0){
       items->erase(it);
       return true;
     }else{
