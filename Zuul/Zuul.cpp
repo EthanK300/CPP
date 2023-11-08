@@ -30,6 +30,7 @@ int main(){
     return 1;
   }
   cout << "List of commands: MOVE, MAP, ACQUIRE, DROP, INV, QUIT" << endl;
+  cout << "MOVE COMMAND SYNTAX: when moving from spaceship->anywhere, fly to: place, when moving from anywhere->anywhere, place" << endl;
   while(active){
     checkIfWon(currentRoom, inventory, rooms);
     cout << "Enter a command: " << endl;
