@@ -30,7 +30,7 @@ int main(){
     return 1;
   }
   cout << "List of commands: MOVE, MAP, ACQUIRE, DROP, INV, QUIT" << endl;
-  cout << "For moving, wherever you are when it lists the exit direction you must input exactly what it says for that given exit. so if when you say MOVE, and it says Exit Direction: fly to: rocket pad to room: spaceship, you would enter in exactly the following: 'fly to: rocket pad'" << endl;
+  cout << "How to use the Move command: it will say, 'Exit direction: somewhere to room: otherplace', in this case you should enter in exactly 'somewhere' if you want to go to room otherplace." << endl;
   while(active){
     checkIfWon(currentRoom, inventory, rooms);
     cout << "Enter a command: " << endl;
@@ -73,7 +73,7 @@ bool openMap(vector<Room*>* &roomsIN){
 //check winning conditions, runs each time after commands
 void checkIfWon(Room* &currentRoom, vector<Item*>* &inventory, vector<Room*>* &rooms){
   char* winRoom = new char[80];
-  strcpy(winRoom, "spaceship");
+  strcpy(winRoom, "earth");
   if(strcmp(currentRoom->getName(), winRoom) == 0){
     char* bubbleTeaT = new char[80];
     strcpy(bubbleTeaT, "bubbletea");
@@ -81,7 +81,19 @@ void checkIfWon(Room* &currentRoom, vector<Item*>* &inventory, vector<Room*>* &r
     strcpy(fuelT, "fuel");
     char* spaceshipT = new char[80];
     strcpy(spaceshipT, "spaceship");
-    if(contains(inventory, bubbleTeaT) && contains(rooms, spaceshipT, fuelT)){
+    char* noteT = new char[80];
+    strcpy(noteT, "note");
+    char* controlchipT = new char[80];
+    strcpy(controlchipT, "controlchip");
+    char* timeWarpT = new char[80];
+    strcpy(timeWarpT, "time warp portal");
+    char* toolboxT = new char[80];
+    strcpy(toolboxT, "toolbox");
+    char* tiramisuT = new char[80];
+    strcpy(tiramisuT, "tiramisu");
+    char* tradehubT = new char[80];
+    strcpy(tradehubT, "interstellar trade hub");
+    if(contains(inventory, bubbleTeaT) && contains(rooms, spaceshipT, fuelT) && contains(rooms, spaceshipT, controlchipT) && contains(rooms, timeWarpT, noteT) && contains(inventory, tiramisuT) && contains(rooms, tradehubT, toolboxT)){
       //win!
       cout << "You Won!" << endl;
       exit(0);
@@ -338,7 +350,7 @@ bool loadResources(vector<Room*>* &rooms, Room* &currentRoom){
   //set exits
 
   char* flyWH = new char[80];
-  strcpy(flyWH, "fly to: wormhole entrance");
+  strcpy(flyWH, "entrance");
   spaceship->setExit(flyWH, wormhole);
 
   char* whout = new char[80];
@@ -346,7 +358,7 @@ bool loadResources(vector<Room*>* &rooms, Room* &currentRoom){
   wormhole->setExit(whout, spaceship);
   
   char* flyBH = new char[80];
-  strcpy(flyBH, "fly to: black hole entrance");
+  strcpy(flyBH, "deadly entrance");
   spaceship->setExit(flyBH, blackhole);
 
   char* bhout = new char[80];
@@ -354,7 +366,7 @@ bool loadResources(vector<Room*>* &rooms, Room* &currentRoom){
   blackhole->setExit(bhout, spaceship);
   
   char* flySF = new char[80];
-  strcpy(flySF, "fly to: force field of space fortress");
+  strcpy(flySF, "force field");
   spaceship->setExit(flySF, spacefortress);
 
   char* sfout = new char[80];
@@ -366,7 +378,7 @@ bool loadResources(vector<Room*>* &rooms, Room* &currentRoom){
   theSun->setExit(ssout, theSun);
   
   char* flyWP = new char[80];
-  strcpy(flyWP, "fly to: weapons plant");
+  strcpy(flyWP, "security gate");
   spaceship->setExit(flyWP, weaponsplant);
 
   char* wpout = new char[80];
@@ -374,7 +386,7 @@ bool loadResources(vector<Room*>* &rooms, Room* &currentRoom){
   weaponsplant->setExit(wpout, spaceship);
   
   char* flyTWP = new char[80];
-  strcpy(flyTWP, "fly to: time warp portal");
+  strcpy(flyTWP, "portal entrance");
   spaceship->setExit(flyTWP, timewarpportal);
 
   char* twpout = new char[80];
@@ -382,16 +394,16 @@ bool loadResources(vector<Room*>* &rooms, Room* &currentRoom){
   timewarpportal->setExit(twpout, spaceship);
 
   char* flySR = new char[80];
-  strcpy(flySR, "fly to: shipwreck");
+  strcpy(flySR, "carrier pad");
   spaceship->setExit(flySR, shipwreck);
   
   char* rocketpad1 = new char[80];
-  strcpy(rocketpad1, "fly to: rocket pad");
+  strcpy(rocketpad1, "rocket pad");
   earth->setExit(rocketpad1, spaceship);
   spaceship->setExit(rocketpad1, earth);
 
   char* flyMLP = new char[80];
-  strcpy(flyMLP, "fly to: moon landing port");
+  strcpy(flyMLP, "lander");
   spaceship->setExit(flyMLP, moon);
 
   char* lp1 = new char[80];
@@ -399,27 +411,27 @@ bool loadResources(vector<Room*>* &rooms, Room* &currentRoom){
   moon->setExit(lp1, spaceship);
 
   char* flyTS = new char[80];
-  strcpy(flyTS, "fly to: the sun");
+  strcpy(flyTS, "outer ring");
   spaceship->setExit(flyTS, theSun);
   
   char* flyTH = new char[80];
-  strcpy(flyTH, "fly to: trade hub");
+  strcpy(flyTH, "commercial building");
   spaceship->setExit(flyTH, tradeHub);
 
   char* flyR = new char[80];
-  strcpy(flyR, "fly to: refinery");
+  strcpy(flyR, "control center");
   spaceship->setExit(flyR, refinery);
 
   char* flyRP = new char[80];
-  strcpy(flyRP, "fly to: recyclingplant");
+  strcpy(flyRP, "command center");
   spaceship->setExit(flyRP, recyclingplant);
 
   char* flyWG = new char[80];
-  strcpy(flyWG, "fly to: landing port");
+  strcpy(flyWG, "gate entrance");
   spaceship->setExit(flyWG, warpgate);
 
   char* flyCA = new char[80];
-  strcpy(flyCA, "fly to: gaseous cloud");
+  strcpy(flyCA, "gaseous cloud");
   spaceship->setExit(flyCA, cosmicanomaly);
   
   char* lp2 = new char[80];
@@ -427,7 +439,7 @@ bool loadResources(vector<Room*>* &rooms, Room* &currentRoom){
   tradeHub->setExit(lp2, spaceship);
 
   char* flyMMS = new char[80];
-  strcpy(flyMMS, "fly to: moon mining station");
+  strcpy(flyMMS, "overlook");
   spaceship->setExit(flyMMS, moonStation);
 
   char* lp3 = new char[80];
@@ -480,7 +492,6 @@ bool loadResources(vector<Room*>* &rooms, Room* &currentRoom){
   rooms->push_back(weaponsplant);
   rooms->push_back(wormhole);
   rooms->push_back(spaceship);
-
   
   currentRoom = earth;
   return true;
