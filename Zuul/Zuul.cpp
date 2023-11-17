@@ -30,7 +30,7 @@ int main(){
     return 1;
   }
   cout << "List of commands: MOVE, MAP, ACQUIRE, DROP, INV, QUIT" << endl;
-  cout << "MOVE COMMAND SYNTAX: when moving from spaceship->anywhere, fly to: place, when moving from anywhere->anywhere, place" << endl;
+  cout << "For moving, wherever you are when it lists the exit direction you must input exactly what it says for that given exit. so if when you say MOVE, and it says Exit Direction: fly to: rocket pad to room: spaceship, you would enter in exactly the following: 'fly to: rocket pad'" << endl;
   while(active){
     checkIfWon(currentRoom, inventory, rooms);
     cout << "Enter a command: " << endl;
@@ -480,6 +480,7 @@ bool loadResources(vector<Room*>* &rooms, Room* &currentRoom){
   rooms->push_back(weaponsplant);
   rooms->push_back(wormhole);
   rooms->push_back(spaceship);
+
   
   currentRoom = earth;
   return true;
