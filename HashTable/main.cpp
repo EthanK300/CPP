@@ -6,9 +6,11 @@
 
 using namespace std;
 
-void ADD(Node*[] list, int listLength, Node* node);
-void DELETE(Node*[] list, int listLength);
-void PRINT(Node*[] list, int listLength);
+void ADD(Node** &INlist, int listLength, Node* node);
+bool check(Node** &INlist, int listLength);
+void DELETE(Node** &INlist, int listLength);
+void PRINT(Node** &INlist, int listLength);
+Node** rehash(Node** &INlist, int listLength);
 void randomGenerate();
 /*
 WHATTTTT AAAAAAA
@@ -16,14 +18,13 @@ w3o5ugbwql34ho82qh34tqnlgihsl39igt92qp34aligteh8oq3iag
 */
 int main(){
   //main running loop
-  int max = 3;
-  Node* init = new Node[100];
-  Node* workingList = init;
-  Node* transfer = NULL;
+  Node** init = new Node*[100];
+  Node** workingList = init;
   bool active = true;
+  int workingLength = 100;
   char terminal[80];
   cout << "List of commands: ADD, PRINT, DELETE, QUIT" << endl;
-  while(int i=0; i < 100; i++){
+  for(int i=0; i < 100; i++){
     init[i] = NULL;
   }
   while(active){
@@ -37,15 +38,19 @@ int main(){
       }
     }
     //assume good input
-    Node* currentNode = head;
+    if(check(workingList, workingLength) == true){
+      workingLength = workingLength * 2;
+      workingList = rehash(workingList, workingLength);
+    }
     if(!strcmp(terminal, "ADD")){
       Student* student = new Student();
       Node* node = new Node(student);
-      ADD(workingList, workingList.length, node);
+      ADD(workingList, workingLength, node);
+      check(workingList, workingLength);
     }else if(!strcmp(terminal, "PRINT")){
-      PRINT(workingList, workingList.length);
+      PRINT(workingList, workingLength);
     }else if(!strcmp(terminal, "DELETE")){
-      DELETE(workingList, workingList.length);
+      DELETE(workingList, workingLength);
     }else if(!strcmp(terminal, "QUIT")){
       cout << "Quitted" << endl;
       return 0;
@@ -56,30 +61,78 @@ int main(){
 }
 
 //add nodes
-void ADD(Node*[] list, int listLength, Node* node){
+void ADD(Node** &INlist, int listLength, Node* node){
   int id = node->getStudent()->getStudentID();
-  int sortID = id%%listLength;
-  int break = 0;
-  if(list[sortID] == NULL){
-    list[sortID] = node;
+  int sortID = id%listLength;
+  if(INlist[sortID] == NULL){
+    INlist[sortID] = node;
   }else{
-    Node currentNode = list[sortID];
+    Node* currentNode = INlist[sortID];
     while(currentNode != NULL){
       if(currentNode->getNext() == NULL){
-	list[sortID]->setNext(node);
+	INlist[sortID]->setNext(node);
       }else{
 	currentNode = currentNode->getNext();
-	break++;
       }
     }
   }
-  if(break > max){
-    
+}
+
+Node** rehash(Node** &INlist, int listLength){
+  Node** newList = new Node*[listLength];
+  Node* transfer = NULL;
+  Node* newCurrentNode = transfer;
+  //empty original list into buffer
+  for(int i=0; i < listLength; i++){
+    if(INlist[i] == NULL){
+      continue;
+    }else if(transfer == NULL){
+      transfer = INlist[i];
+    }else{
+      newCurrentNode = transfer;
+      while(true){
+	if(newCurrentNode->getNext() != NULL){
+	  newCurrentNode = newCurrentNode->getNext();
+	}else{
+	  newCurrentNode->setNext(INlist[i]);
+	}
+      }
+    }
   }
+  //add everything back into original array
+  Node* workingNext = transfer;
+  Node* iteratingNext = transfer;
+  while(true){
+    if(iteratingNext->getNext() != NULL){
+      workingNext = iteratingNext;
+      iteratingNext = iteratingNext->getNext();
+      ADD(newList, listLength, workingNext);
+    }else{
+      break;
+    }
+  }
+  //overwrite working list in main function with updated enlarged list
+  return newList;
+}
+
+bool check(Node** &INlist, int listLength){
+  for(int i=0; i < listLength; i++){
+    if(INlist[i] != NULL){
+      if(INlist[i]->getNext() != NULL){
+	if(INlist[i]->getNext()->getNext() != NULL){
+	  if(INlist[i]->getNext()->getNext()->getNext() != NULL){
+	    cout << "Check failed" << endl;
+	    return true;
+	  }
+	}
+      }
+    } 
+  }
+  return false;
 }
 
 //delete nodes, dynamically order list
-void DELETE(Node*[] list, int listLength){
+void DELETE(Node** &INlist, int listLength){
   int ID = 0;
   char terminal[80];
   cout << "Enter student ID: " << endl;
@@ -89,15 +142,18 @@ void DELETE(Node*[] list, int listLength){
   //TODO: find the right bucket, select, iterate through list and then
 }
 //search for student by id and print info
-void PRINT(Node*[] list, int listLength){
+void PRINT(Node** &INlist, int listLength){
   bool parseable = true;
   int ID = 0;
   char terminal[80];
   for(int i=0; i < listLength; i++){
-    if(list[i]->getNext() == NULL){
+    if(INlist[i] == NULL){
+      continue;
+    }else if(INlist[i]->getNext() == NULL){
+      INlist[i]->getStudent()->printInfo();
       continue;
     }else{
-      Node* currentNode = list[i]->getNext();
+      Node* currentNode = INlist[i]->getNext();
       while(currentNode != NULL){
 	if(currentNode->getNext() == NULL){
 	  break;
