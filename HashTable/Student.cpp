@@ -4,6 +4,10 @@
 
 using namespace std;
 
+Student::Student(int t){
+  
+}
+
 Student::Student(){
   cout << "Input first name: " << endl;
   cin.clear();

@@ -38,15 +38,10 @@ int main(){
       }
     }
     //assume good input
-    if(check(workingList, workingLength) == true){
-      workingLength = workingLength * 2;
-      workingList = rehash(workingList, workingLength);
-    }
     if(!strcmp(terminal, "ADD")){
       Student* student = new Student();
       Node* node = new Node(student);
       ADD(workingList, workingLength, node);
-      check(workingList, workingLength);
     }else if(!strcmp(terminal, "PRINT")){
       PRINT(workingList, workingLength);
     }else if(!strcmp(terminal, "DELETE")){
@@ -56,6 +51,9 @@ int main(){
       return 0;
     }else{
       cout << "Bad Input" << endl;
+    }
+    if(check(workingList, workingLength) == true){
+      workingList = rehash(workingList, workingLength);
     }
   }
 }
@@ -70,7 +68,8 @@ void ADD(Node** &INlist, int listLength, Node* node){
     Node* currentNode = INlist[sortID];
     while(currentNode != NULL){
       if(currentNode->getNext() == NULL){
-	INlist[sortID]->setNext(node);
+	currentNode->setNext(node);
+	return;
       }else{
 	currentNode = currentNode->getNext();
       }
@@ -79,7 +78,11 @@ void ADD(Node** &INlist, int listLength, Node* node){
 }
 
 Node** rehash(Node** &INlist, int listLength){
-  Node** newList = new Node*[listLength];
+  int newLength = listLength * 2;
+  Node** newList = new Node*[newLength];
+  for(int i=0; i < newLength; i++){
+    newList[i] = NULL;
+  }
   Node* transfer = NULL;
   Node* newCurrentNode = transfer;
   //empty original list into buffer
@@ -90,7 +93,7 @@ Node** rehash(Node** &INlist, int listLength){
       transfer = INlist[i];
     }else{
       newCurrentNode = transfer;
-      while(true){
+      while(newCurrentNode != NULL){
 	if(newCurrentNode->getNext() != NULL){
 	  newCurrentNode = newCurrentNode->getNext();
 	}else{
@@ -99,19 +102,26 @@ Node** rehash(Node** &INlist, int listLength){
       }
     }
   }
-  //add everything back into original array
-  Node* workingNext = transfer;
-  Node* iteratingNext = transfer;
-  while(true){
-    if(iteratingNext->getNext() != NULL){
-      workingNext = iteratingNext;
-      iteratingNext = iteratingNext->getNext();
-      ADD(newList, listLength, workingNext);
+  //empty buffer into new list
+  Node* nullNode = NULL;
+  int z = 0;
+  while(transfer->getNext() != NULL){
+    Student* student = new Student(z);
+    student = transfer->getStudent();
+    Node* outTransfer = new Node(student);
+    outTransfer->setNext(nullNode);
+    if(transfer->getNext() != NULL){
+      transfer = transfer->getNext();
+      ADD(newList, newLength, outTransfer);
     }else{
-      break;
+      if(check(newList, newLength)){
+	cout << "Rehash failed" << endl;
+      }else{
+	cout << "Rehash succeeded" << endl;
+      }
+      return newList;
     }
   }
-  //overwrite working list in main function with updated enlarged list
   return newList;
 }
 
@@ -128,6 +138,7 @@ bool check(Node** &INlist, int listLength){
       }
     } 
   }
+  cout << "Check succeeded" << endl;
   return false;
 }
 
@@ -151,17 +162,13 @@ void PRINT(Node** &INlist, int listLength){
       continue;
     }else if(INlist[i]->getNext() == NULL){
       INlist[i]->getStudent()->printInfo();
-      continue;
+    }else if(INlist[i]->getNext()->getNext() == NULL){
+      INlist[i]->getStudent()->printInfo();
+      INlist[i]->getNext()->getStudent()->printInfo();
     }else{
-      Node* currentNode = INlist[i]->getNext();
-      while(currentNode != NULL){
-	if(currentNode->getNext() == NULL){
-	  break;
-	}else{
-	  currentNode->getStudent()->printInfo();
-	  currentNode = currentNode->getNext();
-	}
-      }
+      INlist[i]->getStudent()->printInfo();
+      INlist[i]->getNext()->getStudent()->printInfo();
+      INlist[i]->getNext()->getNext()->getStudent()->printInfo();
     }
   }
 }
