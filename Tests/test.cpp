@@ -2,13 +2,9 @@
 using namespace std;
 int main()
 {
-  int var = 0;
-  int* varPtr = &var;
-  cout << var << endl;
-  *varPtr = 1;
-  cout << var << endl;
-  
-  
+  int arr[5] = {1,2,3,4,5};
+  int *ptr = arr;
+  cout << *(ptr+2) << endl;
   return 0;
 }
 
