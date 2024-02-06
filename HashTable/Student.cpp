@@ -8,6 +8,14 @@ Student::Student(int t){
   
 }
 
+Student::Student(char* first, char* last, int id){
+  srand(time(NULL));
+  strcpy(firstName, first);
+  strcpy(lastName, last);
+  studentID = id;
+  GPA = rand();
+}
+
 Student::Student(){
   cout << "Input first name: " << endl;
   cin.clear();

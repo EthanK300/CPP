@@ -3,6 +3,8 @@
 #include "Student.h"
 #include "Node.h"
 #include <iomanip>
+#include <fstream>
+#include <vector>
 
 using namespace std;
 
@@ -11,19 +13,21 @@ bool check(Node** &INlist, int listLength);
 void DELETE(Node** &INlist, int listLength);
 void PRINT(Node** &INlist, int listLength);
 Node** rehash(Node** &INlist, int listLength);
-void randomGenerate();
+void randomGenerate(Node** &INlist, int ListLength);
 /*
 WHATTTTT AAAAAAA
 w3o5ugbwql34ho82qh34tqnlgihsl39igt92qp34aligteh8oq3iag
 */
+
 int main(){
+  srand(time(NULL));
   //main running loop
   Node** init = new Node*[100];
   Node** workingList = init;
   bool active = true;
   int workingLength = 100;
   char terminal[80];
-  cout << "List of commands: ADD, PRINT, DELETE, QUIT" << endl;
+  cout << "List of commands: ADD, PRINT, DELETE, RANDOM, QUIT" << endl;
   for(int i=0; i < 100; i++){
     init[i] = NULL;
   }
@@ -46,6 +50,8 @@ int main(){
       PRINT(workingList, workingLength);
     }else if(!strcmp(terminal, "DELETE")){
       DELETE(workingList, workingLength);
+    }else if(!strcmp(terminal, "RANDOM")){
+	randomGenerate(workingList, workingLength);
     }else if(!strcmp(terminal, "QUIT")){
       cout << "Quitted" << endl;
       return 0;
@@ -54,6 +60,7 @@ int main(){
     }
     if(check(workingList, workingLength) == true){
       workingList = rehash(workingList, workingLength);
+      workingLength = workingLength * 2;
     }
   }
 }
@@ -105,14 +112,14 @@ Node** rehash(Node** &INlist, int listLength){
   //empty buffer into new list
   Node* nullNode = NULL;
   int z = 0;
-  while(transfer->getNext() != NULL){
+  while(transfer != NULL){
     Student* student = new Student(z);
     student = transfer->getStudent();
     Node* outTransfer = new Node(student);
     outTransfer->setNext(nullNode);
-    if(transfer->getNext() != NULL){
-      transfer = transfer->getNext();
+    if(transfer != NULL){
       ADD(newList, newLength, outTransfer);
+      transfer = transfer->getNext();
     }else{
       if(check(newList, newLength)){
 	cout << "Rehash failed" << endl;
@@ -173,6 +180,47 @@ void PRINT(Node** &INlist, int listLength){
   }
 }
 
-void randomGenerate(){
+void randomGenerate(Node** &INlist, int listLength){
+  char terminal2[80];
+  cout << "How many students to generate? Enter a number: " << endl;
+  cin.clear();
+  cin.ignore(10000, '\n');
+  cin >> terminal2;
+  int num = atoi(terminal2);
+  ifstream firstNames;
+  firstNames.open("firstnames.txt");
+  ifstream lastNames;
+  lastNames.open("lastnames.txt");
+  char firstInput[80];
+  char lastInput[80];
+  vector<char*>* firstNameList = new vector<char*>();
+  vector<char*>* lastNameList = new vector<char*>();
 
+  while(firstNames >> firstInput){
+    char* temp = new char[80];
+    strcpy(temp, firstInput);
+    firstNameList->push_back(temp);
+  }
+  while(lastNames >> lastInput){
+    char* temp2 = new char[80];
+    strcpy(temp2, lastInput);
+    lastNameList->push_back(temp2);
+  }
+  char* frand;
+  char* lrand;
+  cout << rand() << endl;
+  for(int i=0; i < num - 1; i++){
+    int fr = rand() % (firstNameList->size());
+    int lr = rand() % (lastNameList->size());
+    cout << fr << "," << lr << "," << firstNameList->size() << "," << lastNameList->size() << endl;
+    frand = firstNameList->at(fr);
+    lrand = lastNameList->at(lr);
+    char* t1 = new char[80];
+    strcpy(t1, frand);
+    char* t2 = new char[80];
+    strcpy(t2, lrand);
+    Student* student = new Student(t1, t2, i);
+    Node* node = new Node(student);
+    ADD(INlist, listLength, node);
+  }
 }
