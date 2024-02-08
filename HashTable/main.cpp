@@ -46,6 +46,7 @@ int main(){
     if(!strcmp(terminal, "ADD")){
       Student* student = new Student();
       Node* node = new Node(student);
+      node->setNext(NULL);
       ADD(workingList, workingLength, node);
     }else if(!strcmp(terminal, "PRINT")){
       PRINT(workingList, workingLength);
@@ -94,18 +95,19 @@ Node** rehash(Node** &INlist, int listLength){
   Node* transfer = NULL;
   Node* newCurrentNode = transfer;
   //empty original list into buffer
-  for(int i=0; i < listLength; i++){
-    if(INlist[i] == NULL){
+  for(int j=0; j < listLength; j++){
+    if(INlist[j] == NULL){
       continue;
     }else if(transfer == NULL){
-      transfer = INlist[i];
+      transfer = INlist[j];
     }else{
       newCurrentNode = transfer;
       while(newCurrentNode != NULL){
 	if(newCurrentNode->getNext() != NULL){
 	  newCurrentNode = newCurrentNode->getNext();
 	}else{
-	  newCurrentNode->setNext(INlist[i]);
+	  newCurrentNode->setNext(INlist[j]);
+	  break;
 	}
       }
     }
@@ -113,16 +115,6 @@ Node** rehash(Node** &INlist, int listLength){
   //empty buffer into new list
   Node* nullNode = NULL;
   int z = 0;
-  
-  //debug
-  Node* s = transfer;
-  while(s != NULL){
-    cout << s->getStudent()->getStudentID() << endl;
-    s = s->getNext();
-  }
-  //debug
-  
-  
   while(transfer != NULL){
     Student* student = new Student(z);
     student = transfer->getStudent();
@@ -233,6 +225,7 @@ int randomGenerate(Node** &INlist, int listLength, int at){
     Student* student = new Student(t1, t2, at);
     at++;
     Node* node = new Node(student);
+    node->setNext(NULL);
     ADD(INlist, listLength, node);
   }
   return at;
