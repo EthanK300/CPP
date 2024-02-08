@@ -13,7 +13,7 @@ bool check(Node** &INlist, int listLength);
 void DELETE(Node** &INlist, int listLength);
 void PRINT(Node** &INlist, int listLength);
 Node** rehash(Node** &INlist, int listLength);
-void randomGenerate(Node** &INlist, int ListLength);
+int randomGenerate(Node** &INlist, int ListLength, int at);
 /*
 WHATTTTT AAAAAAA
 w3o5ugbwql34ho82qh34tqnlgihsl39igt92qp34aligteh8oq3iag
@@ -26,6 +26,7 @@ int main(){
   Node** workingList = init;
   bool active = true;
   int workingLength = 100;
+  int at = 0;
   char terminal[80];
   cout << "List of commands: ADD, PRINT, DELETE, RANDOM, QUIT" << endl;
   for(int i=0; i < 100; i++){
@@ -51,7 +52,7 @@ int main(){
     }else if(!strcmp(terminal, "DELETE")){
       DELETE(workingList, workingLength);
     }else if(!strcmp(terminal, "RANDOM")){
-	randomGenerate(workingList, workingLength);
+      at = randomGenerate(workingList, workingLength, at);
     }else if(!strcmp(terminal, "QUIT")){
       cout << "Quitted" << endl;
       return 0;
@@ -112,6 +113,16 @@ Node** rehash(Node** &INlist, int listLength){
   //empty buffer into new list
   Node* nullNode = NULL;
   int z = 0;
+  
+  //debug
+  Node* s = transfer;
+  while(s != NULL){
+    cout << s->getStudent()->getStudentID() << endl;
+    s = s->getNext();
+  }
+  //debug
+  
+  
   while(transfer != NULL){
     Student* student = new Student(z);
     student = transfer->getStudent();
@@ -180,7 +191,7 @@ void PRINT(Node** &INlist, int listLength){
   }
 }
 
-void randomGenerate(Node** &INlist, int listLength){
+int randomGenerate(Node** &INlist, int listLength, int at){
   char terminal2[80];
   cout << "How many students to generate? Enter a number: " << endl;
   cin.clear();
@@ -219,8 +230,10 @@ void randomGenerate(Node** &INlist, int listLength){
     strcpy(t1, frand);
     char* t2 = new char[80];
     strcpy(t2, lrand);
-    Student* student = new Student(t1, t2, i);
+    Student* student = new Student(t1, t2, at);
+    at++;
     Node* node = new Node(student);
     ADD(INlist, listLength, node);
   }
+  return at;
 }
