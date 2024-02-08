@@ -18,7 +18,7 @@ int randomGenerate(Node** &INlist, int ListLength, int at);
 WHATTTTT AAAAAAA
 w3o5ugbwql34ho82qh34tqnlgihsl39igt92qp34aligteh8oq3iag
 */
-
+//main runtime
 int main(){
   srand(time(NULL));
   //main running loop
@@ -85,7 +85,7 @@ void ADD(Node** &INlist, int listLength, Node* node){
     }
   }
 }
-
+//resize and reinput nodes into new list
 Node** rehash(Node** &INlist, int listLength){
   int newLength = listLength * 2;
   Node** newList = new Node*[newLength];
@@ -134,7 +134,7 @@ Node** rehash(Node** &INlist, int listLength){
   }
   return newList;
 }
-
+//check to see if any slot is overloaded
 bool check(Node** &INlist, int listLength){
   for(int i=0; i < listLength; i++){
     if(INlist[i] != NULL){
@@ -182,7 +182,7 @@ void PRINT(Node** &INlist, int listLength){
     }
   }
 }
-
+//randomly generate students from a list of names
 int randomGenerate(Node** &INlist, int listLength, int at){
   char terminal2[80];
   cout << "How many students to generate? Enter a number: " << endl;
