@@ -6,13 +6,19 @@
 
 using namespace std;
 
+//Author: Ethan K, zuul project but space themed...
+
 bool loadResources(vector<Room*>* &rooms, Room* &currentRoom);
 bool move(Room* &currentRoom);
 bool acquire(Room* &currentRoom, vector<Item*>* &inventory);
 bool listInventory(vector<Item*>* &inventory);
 bool drop(Room* &currentRoom, vector<Item*>* &inventory);
 bool openMap(vector<Room*>* &listRooms);
+void checkIfWon(Room* &currentRoom, vector<Item*>* &inventory, vector<Room*>* &rooms);
+bool contains(vector<Room*>* &rooms, char* roomName, char* name);
+bool contains(vector<Item*>* &inventory, char* name);
 
+//main running loop
 int main(){
   bool active = true;
   char terminal[80];
@@ -24,7 +30,9 @@ int main(){
     return 1;
   }
   cout << "List of commands: MOVE, MAP, ACQUIRE, DROP, INV, QUIT" << endl;
+  cout << "How to use the Move command: it will say, 'Exit direction: somewhere to room: otherplace', in this case you should enter in exactly 'somewhere' if you want to go to room otherplace." << endl;
   while(active){
+    checkIfWon(currentRoom, inventory, rooms);
     cout << "Enter a command: " << endl;
     cin.clear();
     cin >> terminal;
@@ -53,6 +61,7 @@ int main(){
   }
   return 0;
 }
+//prints out connections of rooms
 bool openMap(vector<Room*>* &roomsIN){
   for(vector<Room*>::iterator it = roomsIN->begin(); it != roomsIN->end(); ++it){
     cout << (*it)->getName() << " exits to: " << endl;
@@ -61,7 +70,61 @@ bool openMap(vector<Room*>* &roomsIN){
   }
   return true;
 }
-
+//check winning conditions, runs each time after commands
+void checkIfWon(Room* &currentRoom, vector<Item*>* &inventory, vector<Room*>* &rooms){
+  char* winRoom = new char[80];
+  strcpy(winRoom, "earth");
+  if(strcmp(currentRoom->getName(), winRoom) == 0){
+    char* bubbleTeaT = new char[80];
+    strcpy(bubbleTeaT, "bubbletea");
+    char* fuelT = new char[80];
+    strcpy(fuelT, "fuel");
+    char* spaceshipT = new char[80];
+    strcpy(spaceshipT, "spaceship");
+    char* noteT = new char[80];
+    strcpy(noteT, "note");
+    char* controlchipT = new char[80];
+    strcpy(controlchipT, "controlchip");
+    char* timeWarpT = new char[80];
+    strcpy(timeWarpT, "time warp portal");
+    char* toolboxT = new char[80];
+    strcpy(toolboxT, "toolbox");
+    char* tiramisuT = new char[80];
+    strcpy(tiramisuT, "tiramisu");
+    char* tradehubT = new char[80];
+    strcpy(tradehubT, "interstellar trade hub");
+    if(contains(inventory, bubbleTeaT) && contains(rooms, spaceshipT, fuelT) && contains(rooms, spaceshipT, controlchipT) && contains(rooms, timeWarpT, noteT) && contains(inventory, tiramisuT) && contains(rooms, tradehubT, toolboxT)){
+      //win!
+      cout << "You Won!" << endl;
+      exit(0);
+      return;
+    }
+  }
+  return;
+}
+//helper function for check win
+bool contains(vector<Room*>* &rooms, char* roomName, char* name){
+  for(vector<Room*>::iterator it = rooms->begin(); it != rooms->end(); ++it){
+    if(strcmp((*it)->getName(), roomName) == 0){
+      for(vector<Item*>::iterator it2 = (*it)->getItems()->begin(); it2 != (*it)->getItems()->end(); ++it2){
+	if(strcmp((*it2)->getName(), name) == 0){
+	  return true;
+	}
+      }
+    }
+  }
+  return false;
+}
+//overloaded helper function
+bool contains(vector<Item*>* &inventory, char*name){
+  for(vector<Item*>::iterator it = inventory->begin(); it != inventory->end(); ++it){
+    if(strcmp((*it)->getName(), name) == 0){
+      return true;
+    }
+  }
+  return false;
+}
+//move somewhere
 bool move(Room* &currentRoom){
   bool valid = true;
   char terminal[80];
@@ -91,16 +154,19 @@ bool move(Room* &currentRoom){
       valid = true;
       return true;
     }
+    cout << "Bad input." << endl;
   }
   return false;
 }
-
+//pick up something
 bool acquire(Room* &currentRoom, vector<Item*>* &inventory){
   bool valid = true;
   char terminal[80];
   cout << "Items in room: " << endl;
   currentRoom->listItems();
+  cin.get();
   while(valid){
+    cout << "What to acquire?" << endl;
     cin.clear();
     cin >> terminal;
     cin.ignore(10000, '\n');
@@ -115,7 +181,7 @@ bool acquire(Room* &currentRoom, vector<Item*>* &inventory){
 	valid = false;
 	cout << "Picked up " << (*it)->getName() << endl;
 	inventory->push_back(*it);
-	currentRoom->removeItem(*it);        
+	currentRoom->removeItem(*it);
 	return true;
       }
     }
@@ -130,7 +196,7 @@ bool acquire(Room* &currentRoom, vector<Item*>* &inventory){
   }
   return false;
 }
-
+//list out inventory items
 bool listInventory(vector<Item*>* &inventory){
   cout << "Items in inventory: " << endl;
   for(vector<Item*>::iterator it = inventory->begin(); it != inventory->end(); ++it){
@@ -138,7 +204,7 @@ bool listInventory(vector<Item*>* &inventory){
   }
   return true;
 }
-
+//drop item in current room
 bool drop(Room* &currentRoom, vector<Item*>* &inventory){
   bool valid = true;
   char terminal[80];
@@ -176,7 +242,7 @@ bool drop(Room* &currentRoom, vector<Item*>* &inventory){
   }
   return false;
 }
-
+//load everything
 bool loadResources(vector<Room*>* &rooms, Room* &currentRoom){
   //create items
   char* note1 = new char[80];
@@ -284,7 +350,7 @@ bool loadResources(vector<Room*>* &rooms, Room* &currentRoom){
   //set exits
 
   char* flyWH = new char[80];
-  strcpy(flyWH, "fly to: wormhole entrance");
+  strcpy(flyWH, "entrance");
   spaceship->setExit(flyWH, wormhole);
 
   char* whout = new char[80];
@@ -292,7 +358,7 @@ bool loadResources(vector<Room*>* &rooms, Room* &currentRoom){
   wormhole->setExit(whout, spaceship);
   
   char* flyBH = new char[80];
-  strcpy(flyBH, "fly to: black hole entrance");
+  strcpy(flyBH, "deadly entrance");
   spaceship->setExit(flyBH, blackhole);
 
   char* bhout = new char[80];
@@ -300,7 +366,7 @@ bool loadResources(vector<Room*>* &rooms, Room* &currentRoom){
   blackhole->setExit(bhout, spaceship);
   
   char* flySF = new char[80];
-  strcpy(flySF, "fly to: force field of space fortress");
+  strcpy(flySF, "force field");
   spaceship->setExit(flySF, spacefortress);
 
   char* sfout = new char[80];
@@ -312,7 +378,7 @@ bool loadResources(vector<Room*>* &rooms, Room* &currentRoom){
   theSun->setExit(ssout, theSun);
   
   char* flyWP = new char[80];
-  strcpy(flyWP, "fly to: weapons plant");
+  strcpy(flyWP, "security gate");
   spaceship->setExit(flyWP, weaponsplant);
 
   char* wpout = new char[80];
@@ -320,7 +386,7 @@ bool loadResources(vector<Room*>* &rooms, Room* &currentRoom){
   weaponsplant->setExit(wpout, spaceship);
   
   char* flyTWP = new char[80];
-  strcpy(flyTWP, "fly to: time warp portal");
+  strcpy(flyTWP, "portal entrance");
   spaceship->setExit(flyTWP, timewarpportal);
 
   char* twpout = new char[80];
@@ -328,16 +394,16 @@ bool loadResources(vector<Room*>* &rooms, Room* &currentRoom){
   timewarpportal->setExit(twpout, spaceship);
 
   char* flySR = new char[80];
-  strcpy(flySR, "fly to: shipwreck");
+  strcpy(flySR, "carrier pad");
   spaceship->setExit(flySR, shipwreck);
   
   char* rocketpad1 = new char[80];
-  strcpy(rocketpad1, "fly to: rocket pad");
+  strcpy(rocketpad1, "rocket pad");
   earth->setExit(rocketpad1, spaceship);
   spaceship->setExit(rocketpad1, earth);
 
   char* flyMLP = new char[80];
-  strcpy(flyMLP, "fly to: moon landing port");
+  strcpy(flyMLP, "lander");
   spaceship->setExit(flyMLP, moon);
 
   char* lp1 = new char[80];
@@ -345,27 +411,27 @@ bool loadResources(vector<Room*>* &rooms, Room* &currentRoom){
   moon->setExit(lp1, spaceship);
 
   char* flyTS = new char[80];
-  strcpy(flyTS, "fly to: the sun");
+  strcpy(flyTS, "outer ring");
   spaceship->setExit(flyTS, theSun);
   
   char* flyTH = new char[80];
-  strcpy(flyTH, "fly to: trade hub");
+  strcpy(flyTH, "commercial building");
   spaceship->setExit(flyTH, tradeHub);
 
   char* flyR = new char[80];
-  strcpy(flyR, "fly to: refinery");
+  strcpy(flyR, "control center");
   spaceship->setExit(flyR, refinery);
 
   char* flyRP = new char[80];
-  strcpy(flyRP, "fly to: recyclingplant");
+  strcpy(flyRP, "command center");
   spaceship->setExit(flyRP, recyclingplant);
 
   char* flyWG = new char[80];
-  strcpy(flyWG, "fly to: landing port");
+  strcpy(flyWG, "gate entrance");
   spaceship->setExit(flyWG, warpgate);
 
   char* flyCA = new char[80];
-  strcpy(flyCA, "fly to: gaseous cloud");
+  strcpy(flyCA, "gaseous cloud");
   spaceship->setExit(flyCA, cosmicanomaly);
   
   char* lp2 = new char[80];
@@ -373,7 +439,7 @@ bool loadResources(vector<Room*>* &rooms, Room* &currentRoom){
   tradeHub->setExit(lp2, spaceship);
 
   char* flyMMS = new char[80];
-  strcpy(flyMMS, "fly to: moon mining station");
+  strcpy(flyMMS, "overlook");
   spaceship->setExit(flyMMS, moonStation);
 
   char* lp3 = new char[80];
