@@ -9,6 +9,7 @@ class Student{
 public:
   Student();
   Student(int type);
+  Student(char* first, char* last, int id);
   char* getFirstName();
   char* getLastName();
   int getStudentID();
