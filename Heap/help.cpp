@@ -12,7 +12,7 @@ void FILL(int table[]);
 
 int main(){
   int table[100];
-  int end = 0;
+  int end = 100;
   for(int p = 0; p < end; p++){
     table[p] = -1;
   }
@@ -31,7 +31,7 @@ int main(){
     //assume good input
     if(!strcmp(terminal, "ADD")){
       cin.clear();
-      cin.ignore('\n',10000);
+      cout << "Enter ID:" << endl;
       cin >> terminal;
       int id = atoi(terminal);
       ADD(table, id, end);
@@ -59,8 +59,11 @@ void ADD(int table[], int id, int end){
       break;
     }
   }
+  if(id == 30){
+    cout << id << endl;
+  }
   //check/reorganize table
-  int ind = floor(i%2);
+  int ind = floor(i/2);
   while(table[i] > table[ind]){
     int child = table[i];
     int parent = table[ind];
@@ -78,10 +81,13 @@ void DELETE(int table[], int end){
 void DISPLAYTREE(int table[], int index, int count, int end){
   if((index * 2) + 1 > end){
     DISPLAYTREE(table, (index * 2) + 1, count + 1, end);
-    for(int a = 0; a < count; a++){
-      cout << '\t';
-    }
-    cout << table[index] << endl;
+  }
+  for(int a = 0; a < count; a++){
+    cout << '\t';
+  }
+  cout << table[index] << endl;
+  if((index * 2) > end){
+    DISPLAYTREE(table, (index * 2), count + 1, end);
   }
 }
 
