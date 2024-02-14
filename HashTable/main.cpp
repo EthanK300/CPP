@@ -141,7 +141,7 @@ bool check(Node** &INlist, int listLength){
       if(INlist[i]->getNext() != NULL){
 	if(INlist[i]->getNext()->getNext() != NULL){
 	  if(INlist[i]->getNext()->getNext()->getNext() != NULL){
-	    cout << "Check failed" << endl;
+	    cout << "Check failed, rehashing" << endl;
 	    return true;
 	  }
 	}
@@ -160,31 +160,32 @@ void DELETE(Node** &INlist, int listLength){
   cin.clear();
   cin >> terminal;
   ID = atoi(terminal);
-  ID = ID % listLength;
-	if(INlist[i] != NULL && ID == INlist[i]->getStudent()->getStudentID()){
+  int i = ID % listLength;
+  cout << ID << endl;
+  if(INlist[i] != NULL && ID == INlist[i]->getStudent()->getStudentID()){
     Node* newNext = INlist[i];
-		if(INlist[i]->getNext() != NULL){
-			INlist[i] = INlist[i]->getNext();
-			delete newNext;
-		}else{
-			INlist[i] = NULL;
-			delete newNext;
-		}
-		cout << "Deleted student" << endl;
+    if(INlist[i]->getNext() != NULL){
+      INlist[i] = INlist[i]->getNext();
+      delete newNext;
+    }else{
+      INlist[i] = NULL;
+      delete newNext;
+    }
+    cout << "Deleted student" << endl;
   }else if(INlist[i]->getNext() != NULL && ID == INlist[i]->getNext()->getStudent()->getStudentID()){
-		Node* newNext = INlist[i]->getNext();
-		if(INlist[i]->getNext()->getNext() != NULL){
-			INlist[i]->setNext(INlist[i]->getNext()->getNext());
-		}
-		delete newNext;
-		cout << "Deleted student" << endl;
-	}else if(INlist[i]->getNext()->getNext() != NULL  && ID == INlist[i]->getNext()->getNext()->getStudent()->getStudentID()){
-   	Node* newNext = INlist[i]->getNext()->getNext();
-		INlist[i]->getNext()->setNext(NULL);
-		delete newNext;
-	}else{
-		cout << "Student not found!" << endl;
-	}
+    Node* newNext = INlist[i]->getNext();
+    if(INlist[i]->getNext()->getNext() != NULL){
+      INlist[i]->setNext(INlist[i]->getNext()->getNext());
+    }
+    delete newNext;
+    cout << "Deleted student" << endl;
+  }else if(INlist[i]->getNext()->getNext() != NULL  && ID == INlist[i]->getNext()->getNext()->getStudent()->getStudentID()){
+    Node* newNext = INlist[i]->getNext()->getNext();
+    INlist[i]->getNext()->setNext(NULL);
+    delete newNext;
+  }else{
+    cout << "Student not found!" << endl;
+  }
 }
 //search for student by id and print info
 void PRINT(Node** &INlist, int listLength){
