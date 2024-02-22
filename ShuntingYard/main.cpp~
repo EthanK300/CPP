@@ -1,0 +1,30 @@
+#include <iostream>
+#include <cstring>
+#include "Node.h"
+
+using namespace std;
+/*
+a: ethan k
+shunting yard
+operation and number parsing yay9ghapo4i3ehgpw4i3tu9q07tu-q2865uptqgggg
+*/
+
+
+int main(){
+  Node* stackHead = NULL;
+  Node* queueHead = NULL;
+  char terminal[80];
+  while(true){
+    cout << "Enter expression:" << endl;
+    cin.clear();
+    cin >> terminal;
+    for(int i = 0; i < strlen(terminal); i++){
+      if(terminal[i] != '^' && !isdigit(terminal[i])){
+	memmove(terminal+i, terminal+1+i, strlen(terminal)-1);
+	i--;
+      }
+    }
+    cout << "Input: " << terminal << endl;
+    
+  }
+}
