@@ -11,15 +11,15 @@ public:
   void setRight(Node* &node);
   Node* getLeft();
   Node* getRight();
-  bool getOperation();
+  int getP();
   char getData();
-  void setOperation(bool o);
+  void setP(int p1);
   ~Node();
 protected:
   Node* left;
   Node* right;
   char data;
-  bool isOperation;
+  int p;
 };
 
 #endif

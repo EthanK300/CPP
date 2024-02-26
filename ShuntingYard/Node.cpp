@@ -34,10 +34,10 @@ char Node::getData(){
   return data;
 }
 
-void Node::setOperation(bool o){
-  isOperation = o;
+void Node::setP(int p1){
+  p = p1;
 }
 
-bool Node::getOperation(){
-  return isOperation;
+int Node::getP(){
+  return p;
 }
