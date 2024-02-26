@@ -9,6 +9,7 @@ void ADD(int table[], int id, int end);
 void DELETE(int table[], int &end);
 void DISPLAYTREE(int table[], int index, int count, int end);
 void FILL(int table[], int &end);
+void DELETEALL(int table[], int &end);
 
 /*
 Author: ethan k
@@ -27,7 +28,7 @@ int main(){
     table[p] = -1;
   }
   char terminal[80];
-  cout << "List of commands: ADD, DISPLAYTREE, DELETE, FILL, QUIT" << endl;
+  cout << "List of commands: ADD, DISPLAYTREE, DELETE, DELETEALL, FILL, QUIT" << endl;
   while(true){
     cout << "Enter a command: " << endl;
     cin.clear();
@@ -51,6 +52,8 @@ int main(){
       DISPLAYTREE(table, 1, 0, end);
     }else if(!strcmp(terminal, "DELETE")){
       DELETE(table, end);
+    }else if(!strcmp(terminal, "DELETEALL")){
+      DELETEALL(table, end);
     }else if(!strcmp(terminal, "FILL")){
       FILL(table, end);
     }else if(!strcmp(terminal, "QUIT")){
@@ -61,6 +64,15 @@ int main(){
     }
   }
 }
+
+void DELETEALL(int table[], int &end){
+  for(int i = 0; i < end + 2; i++){
+    DELETE(table, end);
+  }
+  table[1] = -1;
+  end = 0;
+}
+
 //add number then resort tree
 void ADD(int table[], int id, int end){
   int i = 1;
