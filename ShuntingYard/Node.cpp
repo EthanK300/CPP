@@ -8,6 +8,7 @@ Node::Node(char a){
   left = NULL;
   right = NULL;
   data = a;
+  p = -1;
 }
 
 Node::~Node(){
