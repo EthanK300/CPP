@@ -8,6 +8,11 @@ a: ethan k
 shunting yard
 operation and number parsing yay9ghapo4i3ehgpw4i3tu9q07tu-q2865uptqgggg
 */
+
+//print functions
+
+void infix(Node* treeHead);
+
 //stack functions
 
 void push(Node* &head, Node* node);
@@ -23,7 +28,7 @@ int main(){
   Node* stackHead = NULL;
   Node* queueHead = NULL;
   Node* outQueueHead = NULL;
-  Node* treeHead = NULL;
+  Node* treeStackHead = NULL;
   char terminal[80];
   while(true){
     cout << "Enter expression:" << endl;
@@ -84,8 +89,60 @@ int main(){
 	enqueue(outQueueHead, pop(stackHead));
       }
     }
+
+    //tree builder
+    cout << "g" << endl;
+    while(outQueueHead != NULL){
+      Node* node = new Node(outQueueHead->getData());
+      if(outQueueHead->getP() < 1.5){
+	push(treeStackHead, node);
+      }else{
+	node->setRight(pop(treeStackHead));
+	node->setLeft(pop(treeStackHead));
+	push(treeStackHead, node);
+      }
+      outQueueHead = outQueueHead->getRight();
+    }
+    cout << "tree built" << endl;
+    //tree built
+    while(true){
+      cout << "Choose infix, postfix, prefix notation, or to quit" << endl;
+      cin.clear();
+      cin >> terminal;
+      for(int i = 0; i < strlen(terminal); i++){
+	if(!isalpha(terminal[i])){
+	  memmove(terminal+i, terminal+1+i, strlen(terminal)-1-i);
+	  terminal[strlen(terminal)-1] = '\0';
+	  i--;
+	}
+      }
+      //assume good inputs on infix/postfix/prefix options
+      if(!strcmp(terminal, "infix")){
+	infix(treeStackHead);
+      }else if(!strcmp(terminal, "postfix")){
+	
+      }else if(!strcmp(terminal, "prefix")){
+	
+      }else if(!strcmp(terminal, "quit")){
+	return 0;
+      }else{
+	cout << "Bad input" << endl;
+	continue;
+      }
+    }
   }
 }
+
+void infix(Node* treeHead){
+  if(treeHead->getLeft() != NULL){
+    infix(treeHead->getLeft());
+  }
+  cout << treeHead->getData();
+  if(treeHead->getRight() != NULL){
+    infix(treeHead->getRight());
+  }
+}
+
 
 void push(Node* &head, Node* node){
   if(head != NULL){
@@ -125,10 +182,24 @@ int peek(Node* &head, char c){
 }
 
 void enqueue(Node* &head, Node* node){
-  if(head != NULL){
-    node->setRight(head);
+  if(node != NULL){
+    Node* nodeN = NULL;
+    node->setLeft(nodeN);
+    node->setRight(nodeN);
   }
-  head = node;
+  if(head != NULL){
+    Node* currentNode = head;
+    while(currentNode != NULL){
+      if(currentNode->getRight() != NULL){
+	currentNode = currentNode->getRight();
+      }else{
+	currentNode->setRight(node);
+	return;
+      }
+    }
+  }else{
+    head = node;
+  }
 }
 
 Node* dequeue(Node* &head){
@@ -136,20 +207,8 @@ Node* dequeue(Node* &head){
     cout << "Q empty!" << endl;
     return NULL;
   }else{
-    Node* currentNode = head;
-    Node* beforeNode = NULL;
-    while(currentNode != NULL){
-      if(currentNode->getRight() != NULL){
-	beforeNode = currentNode;
-	currentNode = currentNode->getRight();
-      }else if(beforeNode == NULL){
-	return currentNode;
-      }else{
-	Node* node = NULL;
-	beforeNode->setRight(node);
-	return currentNode;
-      }
-    }
-    return NULL;
+    Node* node = head;
+    head = head->getRight();
+    return node;
   }
 }

@@ -15,11 +15,11 @@ Node::~Node(){
   
 }
 
-void Node::setLeft(Node* &node){
+void Node::setLeft(Node* node){
   left = node;
 }
 
-void Node::setRight(Node* &node){
+void Node::setRight(Node* node){
   right = node;
 }
 

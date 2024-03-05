@@ -7,8 +7,8 @@ using namespace std;
 class Node{
 public:
   Node(char a);
-  void setLeft(Node* &node);
-  void setRight(Node* &node);
+  void setLeft(Node* node);
+  void setRight(Node* node);
   Node* getLeft();
   Node* getRight();
   int getP();
