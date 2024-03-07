@@ -12,6 +12,8 @@ operation and number parsing yay9ghapo4i3ehgpw4i3tu9q07tu-q2865uptqgggg
 //print functions
 
 void infix(Node* treeHead);
+void prefix(Node* treeHead);
+void postfix(Node* treeHead);
 
 //stack functions
 
@@ -46,7 +48,9 @@ int main(){
     for(int i = 0; i < strlen(terminal); i++){
       char c = terminal[i];
       Node* node = new Node(c);
-      if(node->getData() == '^'){
+      if(node->getData() == ')' || node->getData() == '('){
+	node->setP(5);
+      }else if(node->getData() == '^'){
 	node->setP(4);
       }else if(node->getData() == '*' || node->getData() == '/'){
 	node->setP(3);
@@ -76,6 +80,8 @@ int main(){
 	while(stackHead->getData() != '('){
 	  enqueue(outQueueHead, pop(stackHead));
 	}
+	pop(stackHead);
+	pop(queueHead);
       }else{
 	//error parsing, unreadable input
 	continue;
@@ -91,7 +97,6 @@ int main(){
     }
 
     //tree builder
-    cout << "g" << endl;
     while(outQueueHead != NULL){
       Node* node = new Node(outQueueHead->getData());
       if(outQueueHead->getP() < 1.5){
@@ -101,7 +106,7 @@ int main(){
 	node->setLeft(pop(treeStackHead));
 	push(treeStackHead, node);
       }
-      outQueueHead = outQueueHead->getRight();
+      outQueueHead = outQueueHead->getNext();
     }
     cout << "tree built" << endl;
     //tree built
@@ -120,33 +125,54 @@ int main(){
       if(!strcmp(terminal, "infix")){
 	infix(treeStackHead);
       }else if(!strcmp(terminal, "postfix")){
-	
+	postfix(treeStackHead);
       }else if(!strcmp(terminal, "prefix")){
-	
+	prefix(treeStackHead);
       }else if(!strcmp(terminal, "quit")){
 	return 0;
       }else{
 	cout << "Bad input" << endl;
 	continue;
       }
+      cout << endl;
     }
   }
 }
-
+//print out in infix notation
 void infix(Node* treeHead){
   if(treeHead->getLeft() != NULL){
     infix(treeHead->getLeft());
   }
-  cout << treeHead->getData();
+  cout << treeHead->getData() << " ";
   if(treeHead->getRight() != NULL){
     infix(treeHead->getRight());
   }
 }
+//print out in postfix notation
+void postfix(Node* treeHead){
+  if(treeHead->getLeft() != NULL){
+    postfix(treeHead->getLeft());
+  }
+  if(treeHead->getRight() != NULL){
+    postfix(treeHead->getRight());
+  }
+  cout << treeHead->getData() << " ";
+}
+//print out in prefix notation
+void prefix(Node* treeHead){
+  cout << treeHead->getData() << " ";
+  if(treeHead->getLeft() != NULL){
+    prefix(treeHead->getLeft());
+  }
+  if(treeHead->getRight() != NULL){
+    prefix(treeHead->getRight());
+  }
+}
 
-
+//stack functions
 void push(Node* &head, Node* node){
   if(head != NULL){
-    node->setLeft(head);
+    node->setNext(head);
   }
   head = node;
 }
@@ -157,11 +183,13 @@ Node* pop(Node* &head){
     return NULL;
   }else{
     Node* node = head;
-    if(head->getLeft() != NULL){
-      head = head->getLeft();
+    if(head->getNext() != NULL){
+      head = head->getNext();
     }else{
       head = NULL;
     }
+    Node* nodeN = NULL;
+    node->setNext(nodeN);
     return node;
   }
 }
@@ -171,29 +199,29 @@ int peek(Node* &head, char c){
   while(currentNode != NULL){
     if(currentNode->getData() == c){
       return currentNode->getP();
-    }else if(currentNode->getLeft() == NULL){
+    }else if(currentNode->getNext() == NULL){
       cout << "No node to peek at with that value!" << endl;
       return -1;
     }else{
-      currentNode = currentNode->getLeft();
+      currentNode = currentNode->getNext();
     }
   }
   return -1;
 }
 
+//queue functions
 void enqueue(Node* &head, Node* node){
   if(node != NULL){
     Node* nodeN = NULL;
-    node->setLeft(nodeN);
-    node->setRight(nodeN);
+    node->setNext(nodeN);
   }
   if(head != NULL){
     Node* currentNode = head;
     while(currentNode != NULL){
-      if(currentNode->getRight() != NULL){
-	currentNode = currentNode->getRight();
+      if(currentNode->getNext() != NULL){
+	currentNode = currentNode->getNext();
       }else{
-	currentNode->setRight(node);
+	currentNode->setNext(node);
 	return;
       }
     }
@@ -208,7 +236,9 @@ Node* dequeue(Node* &head){
     return NULL;
   }else{
     Node* node = head;
-    head = head->getRight();
+    head = head->getNext();
     return node;
   }
 }
+
+//ps: this code was annoying and so are you XD

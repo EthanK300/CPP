@@ -23,12 +23,20 @@ void Node::setRight(Node* node){
   right = node;
 }
 
+void Node::setNext(Node* node){
+  next = node;
+}
+
 Node* Node::getLeft(){
   return left;
 }
 
 Node* Node::getRight(){
   return right;
+}
+
+Node* Node::getNext(){
+  return next;
 }
 
 char Node::getData(){
