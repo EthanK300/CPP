@@ -20,6 +20,7 @@ void postfix(Node* treeHead);
 void push(Node* &head, Node* node);
 Node* pop(Node* &head);
 Node* peek(Node* &head);
+void treePush(Node* &head, Node* node);
 
 //queue functions
 
@@ -35,7 +36,8 @@ int main(){
   while(true){
     cout << "Enter expression:" << endl;
     cin.clear();
-    cin >> terminal;
+    cin.get(terminal, 80);
+    cout << terminal << endl;
     for(int i = 0; i < strlen(terminal); i++){
       if(terminal[i] != '^' && !isdigit(terminal[i]) && terminal[i] != '+' && terminal[i] != '-' && terminal[i] != '*' && terminal[i] != '/' && terminal[i] != '(' && terminal[i] != ')'){
         memmove(terminal+i, terminal+1+i, strlen(terminal)-1-i);
@@ -95,16 +97,16 @@ int main(){
 	enqueue(outQueueHead, pop(stackHead));
       }
     }
-
+    cout << "g" << endl;
     //tree builder
     while(outQueueHead != NULL){
       Node* node = new Node(outQueueHead->getData());
       if(outQueueHead->getP() < 1.5){
-	push(treeStackHead, node);
+	treePush(treeStackHead, node);
       }else{
 	node->setRight(pop(treeStackHead));
 	node->setLeft(pop(treeStackHead));
-	push(treeStackHead, node);
+	treePush(treeStackHead, node);
       }
       outQueueHead = outQueueHead->getNext();
     }
@@ -171,10 +173,26 @@ void prefix(Node* treeHead){
 
 //stack functions
 void push(Node* &head, Node* node){
-  if(head != NULL){
+  if(head == NULL){
+    node->setNext(NULL);
+    node->setLeft(NULL);
+    node->setRight(NULL);
+    head = node;
+  }else{
     node->setNext(head);
+    node->setLeft(NULL);
+    node->setRight(NULL);
+    head = node;
   }
-  head = node;
+}
+
+void treePush(Node* &head, Node* node){
+  if(head == NULL){
+    head = node;
+  }else{
+    node->setNext(head);
+    head = node;
+  }
 }
 
 Node* pop(Node* &head){
