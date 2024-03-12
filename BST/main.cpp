@@ -43,6 +43,7 @@ int main(){
       Node* node = new Node(num);
       ADD(root, node);
     }else if(!strcmp(terminal, "PRINT")){
+      cout << "A message will appear if your number is present in the tree." << endl;
       PRINT(root, 0);
     }else if(!strcmp(terminal, "DELETE")){
       DELETE(root);
@@ -108,7 +109,11 @@ void PRINT(Node* root, int count){
 }
 
 void DELETE(Node* &root){
-  
+  if(root == NULL){
+    cout << "Nothing to delete! Tree is empty." << endl;
+  }else{
+    
+  }
 }
 
 void FILL(Node* &root){
