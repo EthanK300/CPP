@@ -33,3 +33,7 @@ Node* Node::getsChild(){
 int Node::getData(){
   return data;
 }
+
+void Node::setData(int a){
+  data = a;
+}
