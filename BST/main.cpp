@@ -44,6 +44,10 @@ int main(){
       Node* node = new Node(num);
       ADD(root, node);
     }else if(!strcmp(terminal, "PRINT")){
+      if(root == NULL){
+	cout << "Nothing to print out! No nodes in tree!" << endl;
+	continue;
+      }
       PRINT(root, 0);
     }else if(!strcmp(terminal, "DELETE")){
       cout << "Enter number" << endl;
@@ -99,28 +103,31 @@ void ADD(Node* &root, Node* node){
 }
 
 void PRINT(Node* root, int count){
-  if(root->getsChild() != NULL){
-    PRINT(root->getsChild(), count + 1);
+  if(root->getbChild() != NULL){
+    PRINT(root->getbChild(), count + 1);
   }
   for( int i = 0; i < count; i++){
     cout << '\t';
   }
   cout << root->getData() << endl;
-  if(root->getbChild() != NULL){
-    PRINT(root->getbChild(), count + 1);
+  if(root->getsChild() != NULL){
+    PRINT(root->getsChild(), count + 1);
   }
 }
 
 void DELETE(Node* &root, int value){
   if(root == NULL){
     cout << "Nothing to delete! Tree is empty." << endl;
-  }else if(root->getData() == value){
-    
   }else{
     Node* currentNode = root;
     Node* targetNode = NULL;
     Node* beforeNode = NULL;
     while(currentNode != NULL){
+      if(root->getData() == value){
+	targetNode = root;
+	beforeNode = NULL;
+	break;
+      }
       beforeNode = currentNode;
       if(currentNode->getsChild() != NULL && currentNode->getData() > value){
 	if(currentNode->getsChild()->getData() == value){
@@ -146,49 +153,100 @@ void DELETE(Node* &root, int value){
       }
     }
     //target node is the one to delete and is reference
-    if(targetNode->getsChild() == NULL && targetNode->getbChild() == NULL){
-      //no child
-      if(beforeNode->getsChild() == targetNode){
-	//targetnode is left child
-	beforeNode->setsChild(NULL);
-	delete targetNode;
-      }else{
-	//targetnode is right child
-	beforeNode->setbChild(NULL);
-	delete targetNode;
-      }
-    }else if(targetNode->getsChild() != NULL && targetNode->getbChild() != NULL){
-      //has 2 child
-      Node* currentNode2 = targetNode->getbChild();
-      Node* beforeNode2 = targetNode->getbChild();
-      while(currentNode2 != NULL){
-	if(currentNode2->getsChild() != NULL){
-	  beforeNode2 = currentNode2;
-	  currentNode2 = currentNode2->getsChild();
+    if(targetNode == root){
+      if(root->getsChild() != NULL && root->getbChild() != NULL){
+	//root has both children
+	Node* rootB = root->getbChild();
+	if(rootB->getsChild() == NULL){
+	  root->setData(rootB->getData());
+	  if(rootB->getbChild() != NULL){
+	    root->setbChild(rootB->getbChild());
+	    delete rootB;
+	  }else{
+	    root->setbChild(NULL);
+	    delete rootB;
+	  }
 	}else{
-	  break;
+	  Node* beforeB = rootB;
+	  Node* beforeB2 = rootB;
+	  while(beforeB != NULL){
+	    if(beforeB->getsChild() != NULL){
+	      beforeB2 = beforeB;
+	      beforeB = beforeB->getsChild();
+	    }else{
+	      break;
+	    }
+	  }
+	  root->setData(beforeB->getData());
+	  if(beforeB->getbChild() != NULL){
+	    beforeB2->setsChild(beforeB->getbChild());
+	  }else{
+	    beforeB2->setsChild(NULL);
+	  }
+	  delete beforeB;
 	}
-      }
-      targetNode->setData(currentNode2->getData());
-      if(currentNode2->getbChild() != NULL){
-	beforeNode2->setsChild(currentNode2->getbChild());
-	delete currentNode2;
+      }else if(root->getsChild() == NULL){
+	//root only has b child
+	root = root->getbChild();
+	delete targetNode;
+      }else if(root->getbChild() == NULL){
+	//root only has s child
+	root = root->getsChild();
+	delete targetNode;
       }else{
-	delete currentNode2;
+	//root has no children
+	root = NULL;
+	delete targetNode;
       }
-    }else if(targetNode->getsChild() != NULL){
-      //has smaller child
-      beforeNode->setsChild(targetNode->getsChild());
-      delete targetNode;
     }else{
-      //has bigger child
-      beforeNode->setbChild(targetNode->getbChild());
+      if(targetNode->getsChild() == NULL && targetNode->getbChild() == NULL){
+	//no child
+	if(beforeNode->getsChild() == targetNode){
+	  //targetnode is left child
+	  beforeNode->setsChild(NULL);
+	  delete targetNode;
+	}else{
+	  //targetnode is right child
+	  beforeNode->setbChild(NULL);
+	  delete targetNode;
+	}
+      }else if(targetNode->getsChild() != NULL && targetNode->getbChild() != NULL){
+	//has 2 child
+	Node* currentNode2 = targetNode->getbChild();
+	Node* beforeNode2 = targetNode->getbChild();
+	while(currentNode2 != NULL){
+	  if(currentNode2->getsChild() != NULL){
+	    beforeNode2 = currentNode2;
+	    currentNode2 = currentNode2->getsChild();
+	  }else{
+	    break;
+	  }
+	}
+	targetNode->setData(currentNode2->getData());
+	if(targetNode->getbChild()->getData() == currentNode2->getData()){
+	  targetNode->setbChild(NULL);
+	}
+	if(currentNode2->getbChild() != NULL){
+	  beforeNode2->setsChild(currentNode2->getbChild());
+	  delete currentNode2;
+	}else{
+	  delete currentNode2;
+	}
+      }else if(targetNode->getsChild() != NULL){
+	//has smaller child
+	beforeNode->setsChild(targetNode->getsChild());
+	delete targetNode;
+      }else{
+	//has bigger child
+	beforeNode->setbChild(targetNode->getbChild());
+	delete targetNode;
+      }
     }
   }
 }
 
 void FILL(Node* &root){
-  cout << "Adding students from file" << endl;
+  cout << "Adding numbers from file" << endl;
   ifstream nums;
   nums.open("numbers.txt");
   char* input = new char[80];
