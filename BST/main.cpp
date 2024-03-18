@@ -234,12 +234,22 @@ void DELETE(Node* &root, int value){
 	}
       }else if(targetNode->getsChild() != NULL){
 	//has smaller child
-	beforeNode->setsChild(targetNode->getsChild());
-	delete targetNode;
+	if(beforeNode->getsChild() == targetNode){
+	  beforeNode->setsChild(targetNode->getsChild());
+	  delete targetNode;
+	}else{
+	  beforeNode->setbChild(targetNode->getsChild());
+	  delete targetNode;
+	}
       }else{
 	//has bigger child
-	beforeNode->setbChild(targetNode->getbChild());
-	delete targetNode;
+	if(beforeNode->getsChild() == targetNode){
+	  beforeNode->setsChild(targetNode->getbChild());
+	  delete targetNode;
+	}else{
+	  beforeNode->setbChild(targetNode->getbChild());
+	  delete targetNode;
+	}
       }
     }
   }
