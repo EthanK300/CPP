@@ -230,6 +230,7 @@ void DELETE(Node* &root, int value){
 	  beforeNode2->setsChild(currentNode2->getbChild());
 	  delete currentNode2;
 	}else{
+	  beforeNode2->setsChild(NULL);
 	  delete currentNode2;
 	}
       }else if(targetNode->getsChild() != NULL){
