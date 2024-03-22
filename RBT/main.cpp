@@ -91,6 +91,7 @@ void FILL(Node* &root);
 void PRINT(Node* root, int count);
 void updateTreeA(Node* &root, Node* node);
 void updateTreeD(Node* &root);
+void rotate(Node* &root, Node* gg, Node* g, Node* p, Node* u, Node* s, Node* node);
 
 int main(){
   Node* root = NULL;
@@ -165,40 +166,55 @@ void ADD(Node* &root, Node* node){
 }
 
 void updateTreeA(Node* &root, Node* node){
-  Node* p = node->getP();
+  Node* p = NULL;
   Node* g = NULL;
+  Node* gg = NULL;
   Node* s = NULL;
   Node* u = NULL;
   //creation of family tree for fast reference variables
   if(node != root){
-    g = p->getP();
-    if(p->getL() == node && p->getR() != NULL){
-      s = p->getR();
-    }else if(p->getL() != NULL){
-      s = p->getL();
-    }
-    if(g != NULL){
-      if(g->getR() == p && g->getL() != NULL){
-	u = g->getL();
-      }else if(g->getR() != NULL){
-	u = g->getR();
+    p = node->getP();
+    if(p != NULL){
+      g = p->getP();
+      if(node == p->getL()){
+	s = p->getR();
+      }else{
+	s = p->getL();
+      }
+      if(g != NULL){
+	gg = g->getP();
+	if(p = g->getL()){
+	  u = g->getR();
+	}else{
+	  u = g->getL();
+	}
       }
     }
   }
   //tree updating
-  if(root == node && node->getColor() == RED){
+  if(node->getP() == NULL){
     node->setColor(BLACK);
-  }else if(p->getColor() == RED && u->getColor() == RED){
-    p->setColor(BLACK);
-    u->setColor(BLACK);
-    if(g != root){
+    return;
+  }else if(p->getColor() == BLACK){
+    return;
+  }else{
+    //p is red, i am red, g must exist and is black
+    if(u == NULL){
+      rotate(root, gg, g, p, u, s, node);
+    }else if(u->getColor() == BLACK){
+      rotate(root, gg, g, p, u, s, node);
+    }else{
+      //u is red
+      p->setColor(BLACK);
+      u->setColor(BLACK);
       g->setColor(RED);
       updateTreeA(root, g);
     }
-  }else if(p->getColor() == RED && u->getColor() == BLACK){
-    //4 cases
-    
   }
+}
+
+void rotate(Node* &root, Node* gg, Node* g, Node* p, Node* u, Node* s, Node* node){
+  
 }
 
 void PRINT(Node* root, int count){
@@ -221,143 +237,7 @@ void PRINT(Node* root, int count){
 }
 
 void DELETE(Node* &root, int value){
-  if(root == NULL){
-    cout << "Nothing to delete! Tree is empty." << endl;
-  }else{
-    Node* currentNode = root;
-    Node* targetNode = NULL;
-    Node* beforeNode = NULL;
-    while(currentNode != NULL){
-      if(root->getData() == value){
-	targetNode = root;
-	beforeNode = NULL;
-	break;
-      }
-      beforeNode = currentNode;
-      if(currentNode->getL() != NULL && currentNode->getData() > value){
-	if(currentNode->getL()->getData() == value){
-	  targetNode = currentNode->getL();
-	  break;
-	}else{
-	  currentNode = currentNode->getL();
-	}
-      }else if(currentNode->getR() != NULL & currentNode->getData() < value){
-	if(currentNode->getR()->getData() == value){
-	  targetNode = currentNode->getR();
-	  break;
-	}else{
-	  currentNode = currentNode->getR();
-	}
-      }else{
-	if(currentNode->getL()->getData() == value){
-	  targetNode = currentNode->getL();
-	  break;
-	}else{
-	  currentNode = currentNode->getL();
-	}
-      }
-    }
-    //target node is the one to delete and is reference
-    if(targetNode == root){
-      if(root->getL() != NULL && root->getR() != NULL){
-	//root has both children
-	Node* rootB = root->getR();
-	if(rootB->getL() == NULL){
-	  root->setData(rootB->getData());
-	  if(rootB->getR() != NULL){
-	    root->setR(rootB->getR());
-	    delete rootB;
-	  }else{
-	    root->setR(NULL);
-	    delete rootB;
-	  }
-	}else{
-	  Node* beforeB = rootB;
-	  Node* beforeB2 = rootB;
-	  while(beforeB != NULL){
-	    if(beforeB->getL() != NULL){
-	      beforeB2 = beforeB;
-	      beforeB = beforeB->getL();
-	    }else{
-	      break;
-	    }
-	  }
-	  root->setData(beforeB->getData());
-	  if(beforeB->getR() != NULL){
-	    beforeB2->setL(beforeB->getR());
-	  }else{
-	    beforeB2->setL(NULL);
-	  }
-	  delete beforeB;
-	}
-      }else if(root->getL() == NULL){
-	//root only has b child
-	root = root->getR();
-	delete targetNode;
-      }else if(root->getR() == NULL){
-	//root only has s child
-	root = root->getL();
-	delete targetNode;
-      }else{
-	//root has no children
-	root = NULL;
-	delete targetNode;
-      }
-    }else{
-      if(targetNode->getL() == NULL && targetNode->getR() == NULL){
-	//no child
-	if(beforeNode->getL() == targetNode){
-	  //targetnode is left child
-	  beforeNode->setL(NULL);
-	  delete targetNode;
-	}else{
-	  //targetnode is right child
-	  beforeNode->setR(NULL);
-	  delete targetNode;
-	}
-      }else if(targetNode->getL() != NULL && targetNode->getR() != NULL){
-	//has 2 child
-	Node* currentNode2 = targetNode->getR();
-	Node* beforeNode2 = targetNode->getR();
-	while(currentNode2 != NULL){
-	  if(currentNode2->getR() != NULL){
-	    beforeNode2 = currentNode2;
-	    currentNode2 = currentNode2->getL();
-	  }else{
-	    break;
-	  }
-	}
-	targetNode->setData(currentNode2->getData());
-	if(targetNode->getR()->getData() == currentNode2->getData()){
-	  targetNode->setR(NULL);
-	}
-	if(currentNode2->getR() != NULL){
-	  beforeNode2->setL(currentNode2->getR());
-	  delete currentNode2;
-	}else{
-	  delete currentNode2;
-	}
-      }else if(targetNode->getL() != NULL){
-	//has smaller child
-	if(beforeNode->getL() == targetNode){
-	  beforeNode->setL(targetNode->getL());
-	  delete targetNode;
-	}else{
-	  beforeNode->setR(targetNode->getL());
-	  delete targetNode;
-	}
-      }else{
-	//has bigger child
-	if(beforeNode->getL() == targetNode){
-	  beforeNode->setL(targetNode->getR());
-	  delete targetNode;
-	}else{
-	  beforeNode->setR(targetNode->getR());
-	  delete targetNode;
-	}
-      }
-    }
-  }
+
 }
 
 void updateTreeD(Node* &root){
