@@ -214,7 +214,42 @@ void updateTreeA(Node* &root, Node* node){
 }
 
 void rotate(Node* &root, Node* gg, Node* g, Node* p, Node* u, Node* s, Node* node){
-  
+  //u never disconnects from g, p can't be red and s must be null or black
+  if(p == g->getL()){
+    if(node == p->getL()){
+      if(root == g){
+	//LL case g is root
+	
+      }else{
+	//LL case g is not root
+	
+      }
+    }else{
+      if(root == g){
+	//LR case g is root
+	
+      }else{
+	//LR case g is not root
+      }
+    }
+  }else{
+    if(node == p->getL()){
+      if(root == g){
+	//RL case g is root
+	
+      }else{
+	//RL case g is not root
+      }
+    }else{
+      if(root == g){
+	//RR case g is root
+	
+      }else{
+	//RR case g is not root
+	
+      }
+    }
+  }
 }
 
 void PRINT(Node* root, int count){
@@ -225,9 +260,9 @@ void PRINT(Node* root, int count){
     cout << '\t';
   }
   if(root->getColor() == BLACK){
-    cout << "BLACK";
+    cout << "B";
   }else{
-    cout << "RED";
+    cout << "R";
   }
   cout << ":";
   cout << root->getData() << endl;
