@@ -91,7 +91,9 @@ void FILL(Node* &root);
 void PRINT(Node* root, int count);
 void updateTreeA(Node* &root, Node* node);
 void updateTreeD(Node* &root);
-void rotate(Node* &root, Node* gg, Node* g, Node* p, Node* u, Node* s, Node* node);
+void rotateLeft(Node* &root, Node* node);
+void rotateRight(Node* &root, Node* node);
+
 
 int main(){
   Node* root = NULL;
@@ -183,7 +185,7 @@ void updateTreeA(Node* &root, Node* node){
       }
       if(g != NULL){
 	gg = g->getP();
-	if(p = g->getL()){
+	if(p == g->getL()){
 	  u = g->getR();
 	}else{
 	  u = g->getL();
@@ -198,58 +200,87 @@ void updateTreeA(Node* &root, Node* node){
   }else if(p->getColor() == BLACK){
     return;
   }else{
-    //p is red, i am red, g must exist and is black
-    if(u == NULL){
-      rotate(root, gg, g, p, u, s, node);
-    }else if(u->getColor() == BLACK){
-      rotate(root, gg, g, p, u, s, node);
-    }else{
-      //u is red
+    if(u != NULL && u->getColor() == RED){
+      //recolor
       p->setColor(BLACK);
       u->setColor(BLACK);
       g->setColor(RED);
       updateTreeA(root, g);
+    }else{
+      //rotate and then recolor
+      if(p == g->getL()){
+	if(node == p->getR()){
+	  //LR
+	  rotateLeft(root, p);
+	  rotateRight(root, g);
+	  node->setColor(BLACK);
+	}else{
+	  //LL
+	  rotateRight(root ,g);
+	  p->setColor(BLACK);
+	}
+	g->setColor(RED);
+      }else{
+	if(node == p->getL()){
+	  //RL
+	  rotateRight(root, p);
+	  rotateLeft(root, g);
+	  node->setColor(BLACK);
+	}else{
+	  //RR
+	  rotateLeft(root, g);
+	  p->setColor(BLACK);
+	}
+	g->setColor(RED);
+      }
     }
   }
 }
 
-void rotate(Node* &root, Node* gg, Node* g, Node* p, Node* u, Node* s, Node* node){
-  //u never disconnects from g, p can't be red and s must be null or black
-  if(p == g->getL()){
-    if(node == p->getL()){
-      if(root == g){
-	//LL case g is root
-	
-      }else{
-	//LL case g is not root
-	
-      }
-    }else{
-      if(root == g){
-	//LR case g is root
-	
-      }else{
-	//LR case g is not root
-      }
-    }
+void rotateLeft(Node* &root, Node* node){
+  Node* gg = NULL;
+  Node* p = NULL;
+  Node* s = NULL;
+  p = node->getR();
+  s = p->getL();
+  gg = node->getP();
+  if(root == node){
+    root = p;
+  }else if(gg->getR() == node){
+    gg->setR(p);
   }else{
-    if(node == p->getL()){
-      if(root == g){
-	//RL case g is root
-	
-      }else{
-	//RL case g is not root
-      }
-    }else{
-      if(root == g){
-	//RR case g is root
-	
-      }else{
-	//RR case g is not root
-	
-      }
-    }
+    gg->setL(p);
   }
+  p->setP(gg);
+  p->setL(node);
+  node->setR(s);
+  if(s != NULL){
+    s->setP(node);
+  }
+  node->setP(p);
+}
+
+void rotateRight(Node* &root, Node* node){
+  Node* gg = NULL;
+  Node* p = NULL;
+  Node* s = NULL;
+  p = node->getL();
+  s = p->getR();
+  gg = node->getP();
+  if(root == node){
+    root = p;
+  }else if(gg->getL() == node){
+    gg->setL(p);
+  }else{
+    gg->setR(p);
+  }
+  p->setP(gg);
+  p->setR(node);
+  node->setL(s);
+  if(s != NULL){
+    s->setP(node);
+  }
+  node->setP(p);
 }
 
 void PRINT(Node* root, int count){
