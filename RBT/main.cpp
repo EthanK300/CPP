@@ -302,9 +302,147 @@ void PRINT(Node* root, int count){
   }
 }
 
-void DELETE(Node* &root, int value){
-
+Node* DELETE(Node* &root, int value){
+  if(root == NULL){
+    cout << "Nothing to delete! Tree is empty." << endl;
+  }else{
+    Node* currentNode = root;
+    Node* targetNode = NULL;
+    Node* beforeNode = NULL;
+    while(currentNode != NULL){
+      if(root->getData() == value){
+	targetNode = root;
+	beforeNode = NULL;
+	break;
+      }
+      beforeNode = currentNode;
+      if(currentNode->getsChild() != NULL && currentNode->getData() > value){
+	if(currentNode->getsChild()->getData() == value){
+	  targetNode = currentNode->getsChild();
+	  break;
+	}else{
+	  currentNode = currentNode->getsChild();
+	}
+      }else if(currentNode->getbChild() != NULL & currentNode->getData() < value){
+	if(currentNode->getbChild()->getData() == value){
+	  targetNode = currentNode->getbChild();
+	  break;
+	}else{
+	  currentNode = currentNode->getbChild();
+	}
+      }else{
+	if(currentNode->getsChild()->getData() == value){
+	  targetNode = currentNode->getsChild();
+	  break;
+	}else{
+	  currentNode = currentNode->getsChild();
+	}
+      }
+    }
+    //target node is the one to delete and is reference
+    if(targetNode == root){
+      if(root->getsChild() != NULL && root->getbChild() != NULL){
+	//root has both children
+	Node* rootB = root->getbChild();
+	if(rootB->getsChild() == NULL){
+	  root->setData(rootB->getData());
+	  if(rootB->getbChild() != NULL){
+	    root->setbChild(rootB->getbChild());
+	    delete rootB;
+	  }else{
+	    root->setbChild(NULL);
+	    delete rootB;
+	  }
+	}else{
+	  Node* beforeB = rootB;
+	  Node* beforeB2 = rootB;
+	  while(beforeB != NULL){
+	    if(beforeB->getsChild() != NULL){
+	      beforeB2 = beforeB;
+	      beforeB = beforeB->getsChild();
+	    }else{
+	      break;
+	    }
+	  }
+	  root->setData(beforeB->getData());
+	  if(beforeB->getbChild() != NULL){
+	    beforeB2->setsChild(beforeB->getbChild());
+	  }else{
+	    beforeB2->setsChild(NULL);
+	  }
+	  delete beforeB;
+	}
+      }else if(root->getsChild() == NULL){
+	//root only has b child
+	root = root->getbChild();
+	delete targetNode;
+      }else if(root->getbChild() == NULL){
+	//root only has s child
+	root = root->getsChild();
+	delete targetNode;
+      }else{
+	//root has no children
+	root = NULL;
+	delete targetNode;
+      }
+    }else{
+      if(targetNode->getsChild() == NULL && targetNode->getbChild() == NULL){
+	//no child
+	if(beforeNode->getsChild() == targetNode){
+	  //targetnode is left child
+	  beforeNode->setsChild(NULL);
+	  delete targetNode;
+	}else{
+	  //targetnode is right child
+	  beforeNode->setbChild(NULL);
+	  delete targetNode;
+	}
+      }else if(targetNode->getsChild() != NULL && targetNode->getbChild() != NULL){
+	//has 2 child
+	Node* currentNode2 = targetNode->getbChild();
+	Node* beforeNode2 = targetNode->getbChild();
+	while(currentNode2 != NULL){
+	  if(currentNode2->getsChild() != NULL){
+	    beforeNode2 = currentNode2;
+	    currentNode2 = currentNode2->getsChild();
+	  }else{
+	    break;
+	  }
+	}
+	targetNode->setData(currentNode2->getData());
+	if(targetNode->getbChild()->getData() == currentNode2->getData()){
+	  targetNode->setbChild(NULL);
+	}
+	if(currentNode2->getbChild() != NULL){
+	  beforeNode2->setsChild(currentNode2->getbChild());
+	  delete currentNode2;
+	}else{
+	  beforeNode2->setsChild(NULL);
+	  delete currentNode2;
+	}
+      }else if(targetNode->getsChild() != NULL){
+	//has smaller child
+	if(beforeNode->getsChild() == targetNode){
+	  beforeNode->setsChild(targetNode->getsChild());
+	  delete targetNode;
+	}else{
+	  beforeNode->setbChild(targetNode->getsChild());
+	  delete targetNode;
+	}
+      }else{
+	//has bigger child
+	if(beforeNode->getsChild() == targetNode){
+	  beforeNode->setsChild(targetNode->getbChild());
+	  delete targetNode;
+	}else{
+	  beforeNode->setbChild(targetNode->getbChild());
+	  delete targetNode;
+	}
+      }
+    }
+  }
 }
+
 
 void updateTreeD(Node* &root){
   
