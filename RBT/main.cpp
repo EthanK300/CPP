@@ -236,7 +236,7 @@ void updateTreeA(Node* &root, Node* node){
   }
 }
 
-void rotateLeft(Node* &root, Node* node){
+void rotateLeft(Node* &root, Node* node){//passing in the grandparent of the prerotating subtree
   Node* gg = NULL;
   Node* p = NULL;
   Node* s = NULL;
@@ -259,7 +259,7 @@ void rotateLeft(Node* &root, Node* node){
   node->setP(p);
 }
 
-void rotateRight(Node* &root, Node* node){
+void rotateRight(Node* &root, Node* node){//passing in the grandparent of the prerotating subtree
   Node* gg = NULL;
   Node* p = NULL;
   Node* s = NULL;
@@ -324,22 +324,36 @@ void DELETE(Node* &root, int value){
 	  targetNode = currentNode->getL();
 	  break;
 	}else{
+	  if(currentNode->getL() == NULL){
+	    //not found
+	    cout << "Node not in tree." << endl;
+	    return;
+	  }
 	  currentNode = currentNode->getL();
 	}
-      }else if(currentNode->getR() != NULL & currentNode->getData() < value){
+      }else if(currentNode->getR() != NULL && currentNode->getData() < value){
 	if(currentNode->getR()->getData() == value){
 	  targetNode = currentNode->getR();
 	  break;
 	}else{
+	  if(currentNode->getR() == NULL){
+	    //not found
+	    cout << "Node not in tree." << endl;
+	    return;
+	  }
 	  currentNode = currentNode->getR();
 	}
-      }else{
+      }else if((currentNode->getL() != NULL && currentNode->getL()->getData() == value) || (currentNode->getR() != NULL && currentNode->getR()->getData() == value)){
 	if(currentNode->getL()->getData() == value){
 	  targetNode = currentNode->getL();
 	  break;
 	}else{
-	  currentNode = currentNode->getL();
+	  targetNode = currentNode->getL();
+	  break;
 	}
+      }else{
+	cout << "Node not in tree." << endl;
+	return;
       }
     }
     //target node is the one to delete and is reference
@@ -491,25 +505,47 @@ void updateTreeD(Node* &root, Color::Color u, Color::Color v, Node* parent, bool
       if(s == p->getR()){
 	if(r == s->getR()){
 	  //rr
-	  
+	  rotateRight(root, p);
 	}else{
 	  //rl
-	  
+	  rotateRight(root, s);
+	  rotateLeft(root, p);
 	}
       }else{
 	if(r == s->getR()){
 	  //lr
-	  
+	  rotateLeft(root, s);
+	  rotateRight(root, p);
 	}else{
 	  //ll
-	  
+	  rotateLeft(root, p);
 	}
       }
+    }else if(s->getColor() == BLACK && s->getR() != NULL && s->getL() != NULL && s->getR()->getColor() == BLACK && s->getL()->getColor() == BLACK){
+      //black everything
+      s->setColor(RED);
+      if(p->getColor() == BLACK){
+	if(s == p->getR()){
+	  updateTreeD(root, BLACK, BLACK, g, false);
+	}else{
+	  updateTreeD(root, BLACK, BLACK, g, true);
+	}
+      }
+    }else if(s->getColor() == RED){
+      //sibling is red case
+      //s == p->getR()) ? rotateRight(root, p) : rotateLeft(root, p);
+      if(s == p->getR()){
+	rotateLeft(root, p);
+      }else{
+	rotateRight(root, p);
+      }
+      s->setColor(BLACK);
+      p->setColor(RED);
     }else{
-      //sibling no red children case
-      
+      //error
+      cout << "error" << endl;
+      return;
     }
-    
   }else if(isLeft == true){
     parent->getL()->setColor(BLACK);
     //simple case
@@ -532,5 +568,7 @@ void FILL(Node* &root){
     int n = atoi(temp);
     Node* node = new Node(n);
     ADD(root, node);
+    updateTreeA(root, node);
   }
 }
+
