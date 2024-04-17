@@ -314,171 +314,181 @@ void DELETE(Node* &root, int value){
     Node* beforeNode = NULL;
     while(currentNode != NULL){
       if(root->getData() == value){
-	targetNode = root;
-	beforeNode = NULL;
-	break;
+    	targetNode = root;
+    	beforeNode = NULL;
+    	break;
       }
       beforeNode = currentNode;
       if(currentNode->getL() != NULL && currentNode->getData() > value){
-	if(currentNode->getL()->getData() == value){
-	  targetNode = currentNode->getL();
-	  break;
-	}else{
-	  if(currentNode->getL() == NULL){
-	    //not found
-	    cout << "Node not in tree." << endl;
-	    return;
-	  }
-	  currentNode = currentNode->getL();
-	}
+    	if(currentNode->getL()->getData() == value){
+    	  targetNode = currentNode->getL();
+    	  break;
+    	}else{
+    	  if(currentNode->getL() == NULL){
+    	    //not found
+    	    cout << "Node not in tree." << endl;
+    	    return;
+    	  }
+    	  currentNode = currentNode->getL();
+    	}
       }else if(currentNode->getR() != NULL && currentNode->getData() < value){
-	if(currentNode->getR()->getData() == value){
-	  targetNode = currentNode->getR();
-	  break;
-	}else{
-	  if(currentNode->getR() == NULL){
-	    //not found
-	    cout << "Node not in tree." << endl;
-	    return;
-	  }
-	  currentNode = currentNode->getR();
-	}
+    	if(currentNode->getR()->getData() == value){
+    	  targetNode = currentNode->getR();
+    	  break;
+    	}else{
+    	  if(currentNode->getR() == NULL){
+    	    //not found
+    	    cout << "Node not in tree." << endl;
+    	    return;
+    	  }
+    	  currentNode = currentNode->getR();
+    	}
       }else if((currentNode->getL() != NULL && currentNode->getL()->getData() == value) || (currentNode->getR() != NULL && currentNode->getR()->getData() == value)){
-	if(currentNode->getL()->getData() == value){
-	  targetNode = currentNode->getL();
-	  break;
-	}else{
-	  targetNode = currentNode->getL();
-	  break;
-	}
+    	if(currentNode->getL()->getData() == value){
+    	  targetNode = currentNode->getL();
+    	  break;
+    	}else{
+    	  targetNode = currentNode->getL();
+    	  break;
+    	}
       }else{
-	cout << "Node not in tree." << endl;
-	return;
+        cout << "Node not in tree." << endl;
+        return;
       }
     }
     //target node is the one to delete and is reference
     if(targetNode == root){
-      v = root->getColor();
+      v = BLACK;
       if(root->getL() != NULL && root->getR() != NULL){
-	//root has both children
-	Node* rootB = root->getR();
-	if(rootB->getL() == NULL){
-	  root->setData(rootB->getData());
-	  if(rootB->getR() != NULL){
-	    u = rootB->getColor();
-	    root->setR(rootB->getR());
-	    delete rootB;
-	  }else{
-	    u = rootB->getColor();
-	    root->setL(NULL);
-	    delete rootB;
-	  }
-	}else{
-	  Node* beforeB = rootB;
-	  Node* beforeB2 = rootB;
-	  while(beforeB != NULL){
-	    if(beforeB->getL() != NULL){
-	      beforeB2 = beforeB;
-	      beforeB = beforeB->getL();
+	    //root has both children
+	    Node* rootB = root->getR();
+	    if(rootB->getL() == NULL){
+	      root->setData(rootB->getData());
+	      if(rootB->getR() != NULL){
+	        u = rootB->getColor();
+	        root->setR(rootB->getR());
+  	        delete rootB;
+  	      }else{
+	        u = rootB->getColor();
+	        root->setL(NULL);
+	        delete rootB;
+	      }
 	    }else{
-	      break;
+	      Node* beforeB = rootB;
+	      Node* beforeB2 = rootB;
+	      while(beforeB != NULL){
+	        if(beforeB->getL() != NULL){
+	          beforeB2 = beforeB;
+	          beforeB = beforeB->getL();
+	        }else{
+	          break;
+	        }
+	      }
+	      root->setData(beforeB->getData());
+	      if(beforeB->getR() != NULL){
+	        u = beforeB->getR()->getColor();
+	        beforeB2->setL(beforeB->getR());
+	      }else{
+	        beforeB2->setL(NULL);
+	      }
+	      v = beforeB->getColor();
+	      delete beforeB;
 	    }
-	  }
-	  root->setData(beforeB->getData());
-	  if(beforeB->getR() != NULL){
-	    u = beforeB->getR()->getColor();
-	    beforeB2->setL(beforeB->getR());
-	  }else{
-	    beforeB2->setL(NULL);
-	  }
-	  v = beforeB->getColor();
-	  delete beforeB;
-	}
-      }else if(root->getL() == NULL){
-	u = root->getR()->getColor();
-	//root only has b child
-	root = root->getR();
-	delete targetNode;
-      }else if(root->getR() == NULL){
-	//root only has s child
-	u = root->getL()->getColor();
-	root = root->getL();
-	delete targetNode;
+      }else if(root->getL() == NULL && root->getR() != NULL){
+	    u = root->getR()->getColor();
+	    //root only has b child
+	    root = root->getR();
+	    delete targetNode;
+      }else if(root->getR() == NULL && root->getL() != NULL){
+	    //root only has s child
+	    u = root->getL()->getColor();
+	    root = root->getL();
+	    delete targetNode;
       }else{
-	//root has no children
-	root = NULL;
-	delete targetNode;
+	    //root has no children
+	    root = NULL;
+	    delete targetNode;
       }
     }else{
       v = targetNode->getColor();
       if(targetNode->getL() == NULL && targetNode->getR() == NULL){
-	//no child
-	v = BLACK;
-	parent = beforeNode;
-	if(beforeNode->getL() == targetNode){
-	  //targetnode is left child
-	  isLeft = true;
-	  beforeNode->setL(NULL);
-	  delete targetNode;
-	}else{
-	  //targetnode is right child
-	  isLeft = false;
-	  beforeNode->setR(NULL);
-	  delete targetNode;
-	}
+    	//no child
+    	u = BLACK;
+    	parent = beforeNode;
+    	if(beforeNode->getL() == targetNode){
+    	  //targetnode is left child
+    	  isLeft = true;
+    	  beforeNode->setL(NULL);
+    	  delete targetNode;
+    	}else{
+    	  //targetnode is right child
+    	  isLeft = false;
+    	  beforeNode->setR(NULL);
+    	  delete targetNode;
+    	}
       }else if(targetNode->getL() != NULL && targetNode->getR() != NULL){
-	//has 2 child
-	Node* currentNode2 = targetNode->getR();
-	Node* beforeNode2 = targetNode->getR();
-	while(currentNode2 != NULL){
-	  if(currentNode2->getL() != NULL){
-	    beforeNode2 = currentNode2;
-	    currentNode2 = currentNode2->getL();
-	  }else{
-	    break;
-	  }
-	}
-	parent = beforeNode2;
-	isLeft = true;
-	targetNode->setData(currentNode2->getData());
-	if(targetNode->getR()->getData() == currentNode2->getData()){
-	  targetNode->setR(NULL);
-	}
-	if(currentNode2->getR() != NULL){
-	  beforeNode2->setL(currentNode2->getR());
-	  delete currentNode2;
-	}else{
-	  beforeNode2->setL(NULL);
-	  delete currentNode2;
-	}
+	    //has 2 child
+	    Node* currentNode2 = targetNode->getR();
+	    Node* beforeNode2 = targetNode->getR();
+	    while(currentNode2 != NULL){
+	      if(currentNode2->getL() != NULL){
+	        beforeNode2 = currentNode2;
+	        currentNode2 = currentNode2->getL();
+	      }else{
+	        break;
+	      }
+	    }
+	    v = currentNode2->getColor();
+	    targetNode->setData(currentNode2->getData());
+	    if(currentNode2 == targetNode->getR()){
+	        parent = targetNode;
+	        targetNode->setR(NULL);
+	        isLeft = false;
+	    }else{
+	        parent = beforeNode2;
+	        isLeft = true;
+	    }
+    	if(currentNode2->getR() != NULL){
+    	  beforeNode2->setL(currentNode2->getR());
+    	  u = currentNode2->getR()->getColor();
+    	  delete currentNode2;
+    	}else{
+    	  beforeNode2->setL(NULL);
+    	  u = BLACK;
+    	  delete currentNode2;
+    	}
       }else if(targetNode->getL() != NULL){
-	parent = beforeNode;
-	isLeft = true;
-	//has smaller child
-	u = targetNode->getL()->getColor();
-	if(beforeNode->getL() == targetNode){
-	  beforeNode->setL(targetNode->getL());
-	  delete targetNode;
-	}else{
-	  beforeNode->setR(targetNode->getL());
-	  delete targetNode;
-	}
+	    parent = beforeNode;
+	    isLeft = true;
+	    //has smaller child
+    	u = targetNode->getL()->getColor();
+    	if(beforeNode->getL() == targetNode){
+    	  beforeNode->setL(targetNode->getL());
+    	  delete targetNode;
+    	}else{
+    	  beforeNode->setR(targetNode->getL());
+    	  delete targetNode;
+    	}
       }else{
-	parent = beforeNode;
-	isLeft = false;
-	//has bigger child
-	u = targetNode->getR()->getColor();
-	if(beforeNode->getL() == targetNode){
-	  beforeNode->setL(targetNode->getR());
-	  delete targetNode;
-	}else{
-	  beforeNode->setR(targetNode->getR());
-	  delete targetNode;
-	}
+    	parent = beforeNode;
+    	isLeft = false;
+    	//has bigger child
+    	u = targetNode->getR()->getColor();
+    	if(beforeNode->getL() == targetNode){
+    	  beforeNode->setL(targetNode->getR());
+    	  delete targetNode;
+    	}else{
+    	  beforeNode->setR(targetNode->getR());
+    	  delete targetNode;
+    	}
       }
     }
   }
-  updateTreeD(root, u, v, parent, isLeft);
+  if(root != NULL){
+    updateTreeD(root, u, v, parent, isLeft);
+  }else{
+    return;
+  }
 }
 
 
@@ -503,41 +513,43 @@ void updateTreeD(Node* &root, Color::Color u, Color::Color v, Node* parent, bool
       //sibling one red child case
       Node* r = s->getL()->getColor() == RED ? s->getL() : s->getR();
       if(s == p->getR()){
-	if(r == s->getR()){
-	  //rr
-	  rotateRight(root, p);
-	}else{
-	  //rl
-	  rotateRight(root, s);
-	  rotateLeft(root, p);
-	}
+    	if(r == s->getR()){
+    	  //rr
+    	  rotateRight(root, p);
+    	}else{
+    	  //rl
+    	  rotateRight(root, s);
+    	  rotateLeft(root, p);
+    	}
       }else{
-	if(r == s->getR()){
-	  //lr
-	  rotateLeft(root, s);
-	  rotateRight(root, p);
-	}else{
-	  //ll
-	  rotateLeft(root, p);
-	}
+    	if(r == s->getR()){
+    	  //lr
+    	  rotateLeft(root, s);
+    	  rotateRight(root, p);
+    	}else{
+    	  //ll
+    	  rotateLeft(root, p);
+    	}
       }
-    }else if(s->getColor() == BLACK && s->getR() != NULL && s->getL() != NULL && s->getR()->getColor() == BLACK && s->getL()->getColor() == BLACK){
+    }else if(s->getColor() == BLACK && (s->getL() == NULL || s->getL()->getColor() == BLACK) && (s->getR() == NULL || s->getR()->getColor() == BLACK)){
       //black everything
       s->setColor(RED);
       if(p->getColor() == BLACK){
-	if(s == p->getR()){
-	  updateTreeD(root, BLACK, BLACK, g, false);
-	}else{
-	  updateTreeD(root, BLACK, BLACK, g, true);
-	}
+    	if(s == p->getR()){
+    	  updateTreeD(root, BLACK, BLACK, g, false);
+    	}else{
+    	  updateTreeD(root, BLACK, BLACK, g, true);
+    	}
+      }else{
+        p->setColor(BLACK);
       }
     }else if(s->getColor() == RED){
       //sibling is red case
       //s == p->getR()) ? rotateRight(root, p) : rotateLeft(root, p);
       if(s == p->getR()){
-	rotateLeft(root, p);
+	    rotateLeft(root, p);
       }else{
-	rotateRight(root, p);
+	    rotateRight(root, p);
       }
       s->setColor(BLACK);
       p->setColor(RED);
@@ -546,15 +558,13 @@ void updateTreeD(Node* &root, Color::Color u, Color::Color v, Node* parent, bool
       cout << "error" << endl;
       return;
     }
-  }else if(isLeft == true){
+  }else if(isLeft == true && parent->getL() != NULL){
     parent->getL()->setColor(BLACK);
     //simple case
-  }else if(isLeft == false){
+  }else if(isLeft == false && parent->getR() != NULL){
     parent->getR()->setColor(BLACK);
-  }else{
-    cout << "Error" << endl;
-    return;
   }
+  root->setColor(BLACK);
 }
 
 void FILL(Node* &root){
@@ -571,4 +581,3 @@ void FILL(Node* &root){
     updateTreeA(root, node);
   }
 }
-
