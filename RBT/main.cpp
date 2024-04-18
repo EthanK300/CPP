@@ -356,7 +356,7 @@ void DELETE(Node* &root, int value){
         return;
       }
     }
-    //target node is the one to delete and is reference
+    //target node is root and is one to delete
     if(targetNode == root){
       v = BLACK;
       if(root->getL() != NULL && root->getR() != NULL){
@@ -364,15 +364,17 @@ void DELETE(Node* &root, int value){
 	    Node* rootB = root->getR();
 	    if(rootB->getL() == NULL){
 	      root->setData(rootB->getData());
+	      v = rootB->getColor();
 	      if(rootB->getR() != NULL){
-	        u = rootB->getColor();
+	        u = rootB->getR()->getColor();
 	        root->setR(rootB->getR());
-  	        delete rootB;
   	      }else{
-	        u = rootB->getColor();
-	        root->setL(NULL);
-	        delete rootB;
+	        root->setR(NULL);
+	        u = BLACK;
 	      }
+	      delete rootB;
+	      parent = root;
+	      isLeft = false;
 	    }else{
 	      Node* beforeB = rootB;
 	      Node* beforeB2 = rootB;
@@ -384,15 +386,21 @@ void DELETE(Node* &root, int value){
 	          break;
 	        }
 	      }
+	      
+	      cout << "b" << beforeB->getData() << "b2" << beforeB2->getData() << endl;
+	      v = beforeB->getColor();
+	      parent = beforeB2;
 	      root->setData(beforeB->getData());
 	      if(beforeB->getR() != NULL){
 	        u = beforeB->getR()->getColor();
 	        beforeB2->setL(beforeB->getR());
 	      }else{
 	        beforeB2->setL(NULL);
+	        u = BLACK;
 	      }
-	      v = beforeB->getColor();
+	      isLeft = true;
 	      delete beforeB;
+	      cout << "v" << v << "u" << u << "p" << parent->getData() << "l" << isLeft << endl;
 	    }
       }else if(root->getL() == NULL && root->getR() != NULL){
 	    u = root->getR()->getColor();
@@ -484,6 +492,9 @@ void DELETE(Node* &root, int value){
       }
     }
   }
+  cout << "u: " << u << endl;
+  cout << "v: " << v << endl;
+  parent != NULL ? cout << parent->getData() << endl : cout << "parent null" << endl; 
   if(root != NULL){
     updateTreeD(root, u, v, parent, isLeft);
   }else{
@@ -497,6 +508,7 @@ void updateTreeD(Node* &root, Color::Color u, Color::Color v, Node* parent, bool
     root->setColor(BLACK);
     return;
   }
+  cout << parent->getData() << endl;
   if(v == BLACK && u == BLACK){
     //double black case
     //create references
@@ -515,20 +527,29 @@ void updateTreeD(Node* &root, Color::Color u, Color::Color v, Node* parent, bool
       if(s == p->getR()){
     	if(r == s->getR()){
     	  //rr
-    	  rotateRight(root, p);
+    	  rotateLeft(root, p);
     	}else{
     	  //rl
     	  rotateRight(root, s);
-    	  rotateLeft(root, p);
+    	  rotateLeft(root, s->getP()->getP());
+    	  if(s->getP()->getColor() == RED){
+    	    s->setColor(RED);
+    	    s->getP()->setColor(BLACK);
+    	  }
     	}
       }else{
     	if(r == s->getR()){
     	  //lr
     	  rotateLeft(root, s);
     	  rotateRight(root, p);
+    	  if(s->getP()->getColor() == RED){
+    	    s->setColor(RED);
+    	    s->getP()->setColor(BLACK);
+    	  }
     	}else{
     	  //ll
-    	  rotateLeft(root, p);
+    	  rotateRight(root, p);
+    	  p->getP()->getL()->setColor(BLACK);
     	}
       }
     }else if(s->getColor() == BLACK && (s->getL() == NULL || s->getL()->getColor() == BLACK) && (s->getR() == NULL || s->getR()->getColor() == BLACK)){
