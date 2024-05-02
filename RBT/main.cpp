@@ -519,51 +519,45 @@ void updateTreeD(Node* &root, Color::Color u, Color::Color v, Node* parent, bool
     }else{
       s = p->getL();
     }
+    p == NULL ? cout << "Parent is null" << endl: cout << "Parent is " << p->getColor() << " with a value of " << parent->getData()<< endl;
+    s == NULL ? cout << "sibling is null" << endl: cout << "sibling is " << s->getColor() << " with a value of " << s->getData() << endl;;
     //cases
-    if(s->getColor() == BLACK && (s->getL() != NULL && s->getL()->getColor() == RED || s->getR() != NULL && s->getR()->getColor() == RED)){
+    if(s->getColor() == BLACK && ((s->getL() != NULL && s->getL()->getColor() == RED )||( s->getR() != NULL && s->getR()->getColor() == RED))){
       //sibling one red child case
       s == p->getR() ? cout << "the sibling is right" << endl : cout << "the sibling is left" << endl;
       cout << "parent: " << parent->getData() << endl;
-      Node* r = s->getL()->getColor() == RED ? s->getL() : s->getR();
-      if(s == p->getR()){
-    	if(r == s->getR()){
-    	  //rr
-    	  rotateLeft(root, p);
-    	}else{
-    	  //rl
-    	  rotateRight(root, s);
-    	  rotateLeft(root, s->getP()->getP());
-	  
-	  if(s->getP()->getColor() == RED){
-    	    s->setColor(RED);
-    	    s->getP()->setColor(BLACK);
-    	  }
-	  
-    	}
+      Node* r = (s->getL() != NULL && s->getL()->getColor() == RED) ? s->getL() : s->getR();
+      if(s->getL() != NULL && s->getL()->getColor() == RED){
+	if(s == p->getL()){
+	  //ll
+	  s->getL()->setColor(s->getColor());
+	  s->setColor(p->getColor());
+	  rotateRight(root, p);
+	}else{
+	  //rl
+	  s->getL()->setColor(p->getColor());
+	  rotateRight(root, s);
+	  rotateLeft(root, p);
+	}
       }else{
-    	if(r == s->getR()){
-    	  //lr
-    	  rotateLeft(root, s);
-	  cout << "-------" << endl;
-	  PRINT(root, 0);
-	  cout << "-------p:" << p->getData() << endl;
-    	  rotateRight(root, p);
-	  PRINT(root, 0);
-    	  if(s->getP()->getColor() == RED){
-    	    s->setColor(RED);
-    	    s->getP()->setColor(BLACK);
-    	  }
-    	}else{
-    	  //ll
-    	  rotateRight(root, p);
-    	  p->getP()->getL()->setColor(BLACK);
-    	}
+	if(s == p->getL()){
+	  //lr
+	  s->getR()->setColor(p->getColor());
+	  rotateLeft(root, s);
+	  rotateRight(root, p);
+	}else{
+	  //rr
+	  s->getR()->setColor(s->getColor());
+	  s->setColor(p->getColor());
+	  rotateLeft(root, p);
+	}
       }
+      p->setColor(BLACK);
     }else if(s->getColor() == BLACK && (s->getL() == NULL || s->getL()->getColor() == BLACK) && (s->getR() == NULL || s->getR()->getColor() == BLACK)){
       //black everything
       s->setColor(RED);
       if(p->getColor() == BLACK){
-	PRINT(root, 0);
+	//PRINT(root, 0);
     	if(s == p->getR()){
     	  updateTreeD(root, BLACK, BLACK, g, true);
     	}else{
@@ -574,22 +568,19 @@ void updateTreeD(Node* &root, Color::Color u, Color::Color v, Node* parent, bool
       }
     }else if(s->getColor() == RED){
       //sibling is red case
-      //s == p->getR()) ? rotateRight(root, p) : rotateLeft(root, p);
-      if(s == p->getR()){
-	    rotateLeft(root, p);
-      }else{
-	    rotateRight(root, p);
-      }
       s->setColor(BLACK);
       p->setColor(RED);
-      if(p->getL()->getR() != NULL){
-	//lr
-	rotateLeft(root, p->getL());
-	p->getL()->setColor(BLACK);
-	p->getL()->getL()->setColor(RED);
-	rotateRight(root, p);
+      if(s == p->getR()){
+	rotateLeft(root, p);
+	cout << "temp tree" << endl;
+	PRINT(root, 0);
+	updateTreeD(root, BLACK, BLACK, p, true);
       }else{
-	rotateRight(root, parent->getL());
+	PRINT(root, 0);
+	rotateRight(root, p);
+	cout << "temp tree" << endl;
+	PRINT(root, 0);
+	updateTreeD(root, BLACK, BLACK, p, false);
       }
     }else{
       //error
