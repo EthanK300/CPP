@@ -10,16 +10,27 @@ Author: Ethan K
 graph creator eeeee
  */
 
-void ADDV(vector<int>** matrix);
-void ADDE(vector<int>** matrix);
-void REMV(vector<int>** matrix);
-void REME(vector<int>** matrix);
-void FSP(vector<int>** matrix);
+void PRINT(int** matrix);
+void ADDV(int** matrix);
+void ADDE(int** matrix);
+void REMV(int** matrix);
+void REME(int** matrix);
+void FSP(int** matrix);
 
 int main(){
-  vector** matrix = new vector<vector<int>>();
+  int** matrix = new int*[20];
+  int* vertices = new int[20];
   char terminal[80];
-  cout << "Commands: ADDV, ADDE, REMV, REME, FSP, QUIT" << endl;
+  for(int i = 0; i < 20 ; i++){
+    matrix[i] = new int[20];
+    vertices[i] = -1;
+    //cout << endl;
+    for(int j = 0; j < 20; j++){
+      matrix[i][j] = -1;
+      //cout << matrix[i][j] << "  ";
+    }
+  }
+  cout << "Commands: PRINT, ADDV, ADDE, REMV, REME, FSP, QUIT" << endl;
   while(true){
     cout << "Enter command:" << endl;
     cin.clear();
@@ -42,11 +53,24 @@ int main(){
       
     }else if(!strcmp(terminal, "FSP")){
       
+    }else if(!strcmp(terminal, "PRINT")){
+      PRINT(matrix);
     }else if(!strcmp(terminal, "QUIT")){
-      
+      return 0;
     }else{
       cout << "Bad Input." << endl;
     }
+  }
+}
+
+void PRINT(int** matrix){
+  cout << endl;
+  for(int i = 0; i < 20 ; i++){
+    cout << endl;
+    for(int j = 0; j < 20; j++){
+      cout << matrix[i][j] << "  ";
+    }
+    cout << endl;
   }
 }
 
