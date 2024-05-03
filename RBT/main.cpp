@@ -386,8 +386,6 @@ void DELETE(Node* &root, int value){
 	          break;
 	        }
 	      }
-	      
-	      cout << "b" << beforeB->getData() << "b2" << beforeB2->getData() << endl;
 	      v = beforeB->getColor();
 	      parent = beforeB2;
 	      root->setData(beforeB->getData());
@@ -400,7 +398,6 @@ void DELETE(Node* &root, int value){
 	      }
 	      isLeft = true;
 	      delete beforeB;
-	      cout << "v" << v << "u" << u << "p" << parent->getData() << "l" << isLeft << endl;
 	    }
       }else if(root->getL() == NULL && root->getR() != NULL){
 	    u = root->getR()->getColor();
@@ -436,6 +433,7 @@ void DELETE(Node* &root, int value){
     	}
       }else if(targetNode->getL() != NULL && targetNode->getR() != NULL){
 	    //has 2 child
+	    cout << "targetNode:" << targetNode->getData() << endl;
 	    Node* currentNode2 = targetNode->getR();
 	    Node* beforeNode2 = targetNode->getR();
 	    while(currentNode2 != NULL){
@@ -446,11 +444,12 @@ void DELETE(Node* &root, int value){
 	        break;
 	      }
 	    }
+	    cout << "cNode: " << currentNode2->getData() << ", bNode: " << beforeNode2->getData() << endl;
 	    v = currentNode2->getColor();
 	    targetNode->setData(currentNode2->getData());
 	    if(currentNode2 == targetNode->getR()){
 	        parent = targetNode;
-	        targetNode->setR(NULL);
+	        targetNode->setR(currentNode2->getR());
 	        isLeft = false;
 	    }else{
 	        parent = beforeNode2;
@@ -508,6 +507,8 @@ void updateTreeD(Node* &root, Color::Color u, Color::Color v, Node* parent, bool
     root->setColor(BLACK);
     return;
   }
+  parent == NULL ? cout << "Parent is null" << endl: cout << "Parent is " << parent->getColor() << " with a value of " << parent->getData()<< endl;
+  parent->getR() == NULL ? cout << "pright null" << endl: cout << "pright exists: " << parent->getR()->getData() << endl;
   if(v == BLACK && u == BLACK){
     //double black case
     //create references
@@ -519,13 +520,11 @@ void updateTreeD(Node* &root, Color::Color u, Color::Color v, Node* parent, bool
     }else{
       s = p->getL();
     }
-    p == NULL ? cout << "Parent is null" << endl: cout << "Parent is " << p->getColor() << " with a value of " << parent->getData()<< endl;
     s == NULL ? cout << "sibling is null" << endl: cout << "sibling is " << s->getColor() << " with a value of " << s->getData() << endl;;
     //cases
     if(s->getColor() == BLACK && ((s->getL() != NULL && s->getL()->getColor() == RED )||( s->getR() != NULL && s->getR()->getColor() == RED))){
       //sibling one red child case
       s == p->getR() ? cout << "the sibling is right" << endl : cout << "the sibling is left" << endl;
-      cout << "parent: " << parent->getData() << endl;
       Node* r = (s->getL() != NULL && s->getL()->getColor() == RED) ? s->getL() : s->getR();
       if(s->getL() != NULL && s->getL()->getColor() == RED){
 	if(s == p->getL()){
@@ -588,9 +587,11 @@ void updateTreeD(Node* &root, Color::Color u, Color::Color v, Node* parent, bool
       return;
     }
   }else if(isLeft == true && parent->getL() != NULL){
+      cout << "111111" << endl;
     parent->getL()->setColor(BLACK);
     //simple case
   }else if(isLeft == false && parent->getR() != NULL){
+      cout << "111" << endl;
     parent->getR()->setColor(BLACK);
   }
   root->setColor(BLACK);
