@@ -10,12 +10,12 @@ Author: Ethan K
 graph creator eeeee
  */
 
-void PRINT(int** matrix);
-void ADDV(int** matrix);
-void ADDE(int** matrix);
-void REMV(int** matrix);
-void REME(int** matrix);
-void FSP(int** matrix);
+void PRINT(int** matrix, int* vertices);
+void ADDV(int** matrix, int* &vertices);
+void ADDE(int** matrix, int* vertices);
+void REMV(int** matrix, int* &vertices);
+void REME(int** matrix, int* vertices);
+void FSP(int** matrix, int* vertices);
 
 int main(){
   int** matrix = new int*[20];
@@ -63,7 +63,7 @@ int main(){
   }
 }
 
-void PRINT(int** matrix){
+void PRINT(int** matrix, int* vertices){
   cout << endl;
   for(int i = 0; i < 20 ; i++){
     cout << endl;
@@ -74,22 +74,22 @@ void PRINT(int** matrix){
   }
 }
 
-void ADDV(){
+void ADDV(int** matrix, int* &vertices){
   
 }
 
-void ADDE(){
+void ADDE(int** matrix, int* vertices){
 
 }
 
-void REMV(){
+void REMV(int** matrix, int* &vertices){
 
 }
 
-void REME(){
+void REME(int** matrix, int* vertices){
 
 }
 
-void FSP(){
+void FSP(int** matrix, int* vertices){
 
 }
