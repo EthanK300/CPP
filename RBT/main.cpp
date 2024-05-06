@@ -497,7 +497,7 @@ void DELETE(Node* &root, int value){
 }
 
 
-void updateTreeD(Node* &root, Color::Color u, Color::Color v, Node* parent, bool isLeft){
+void updateTreeD(Node* &root, Color::Color u, Color::Color v, Node* parent, bool isLeft){//where isLeft is the position of the node (NOT THE SIBLING)
   if(parent == NULL){
     root->setColor(BLACK);
     return;
@@ -547,11 +547,11 @@ void updateTreeD(Node* &root, Color::Color u, Color::Color v, Node* parent, bool
       //black everything
       s->setColor(RED);
       if(p->getColor() == BLACK){
-    	if(s == p->getR()){
-    	  updateTreeD(root, BLACK, BLACK, g, true);
-    	}else{
-    	  updateTreeD(root, BLACK, BLACK, g, false);
-    	}
+        if(g != NULL && p == g->getR()){
+	  updateTreeD(root, BLACK, BLACK, g, false);
+	}else if(g != NULL && p == g->getL()){
+	  updateTreeD(root, BLACK, BLACK, g, true);
+	}
       }else{
         p->setColor(BLACK);
       }
