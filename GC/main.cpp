@@ -10,17 +10,16 @@ Author: Ethan K
 graph creator eeeee
  */
 
-void PRINT(int** matrix);
-void ADDV(int* &vertices, int num, int vLength);
-void ADDE(int** &matrix, int* vertices, int vLength, int weight, int first, int second);
-void REMV(int** &matrix, int* &vertices, int num, int vLength);
-void REME(int** &matrix, int* vertices, int vLength, int weight);
-void FSP(int** matrix, int* vertices, int vLength, int first, int second);
+void PRINT(int** matrix, int* vertices);
+void ADDV(int* &vertices, int num);
+void ADDE(int** &matrix, int* vertices, int weight, int first, int second);
+void REMV(int** &matrix, int* &vertices, int num);
+void REME(int** &matrix, int* vertices, int first, int second);
+void FSP(int** matrix, int* vertices, int first, int second);
 
 int main(){
   int** matrix = new int*[20];
   int* vertices = new int[20];
-  int vLength = 0;
   char terminal[80];
   for(int i = 0; i < 20 ; i++){
     matrix[i] = new int[20];
@@ -49,35 +48,37 @@ int main(){
       cin.clear();
       cin >> terminal;
       int num = atoi(terminal);
-      ADDV(vertices, num, vLength);
-      vLength++;
+      ADDV(vertices, num);
     }else if(!strcmp(terminal, "ADDE")){
       cout << "enter weight: " << endl;
       cin.clear();
       cin >> terminal;
       int weight = atoi(terminal);
-      cout << "enter 1st vertex: " << endl;
+      cout << "enter 1st vertex (x): " << endl;
       cin.clear();
       cin >> terminal;
       int first = atoi(terminal);
-      cout << "enter 2nd vertex: " << endl;
+      cout << "enter 2nd vertex (y): " << endl;
       cin.clear();
       cin >> terminal;
       int second = atoi(terminal);
-      ADDE(matrix, vertices, vLength, first, second, weight);
+      ADDE(matrix, vertices, first, second, weight);
     }else if(!strcmp(terminal, "REMV")){
       cout << "enter number: " << endl;
       cin.clear();
       cin >> terminal;
       int num = atoi(terminal);
-      REMV(matrix, vertices, vLength, num);
-      vLength--;
+      REMV(matrix, vertices, num);
     }else if(!strcmp(terminal, "REME")){
-      cout << "enter weight: " << endl;
+      cout << "enter 1st vertex (x): " << endl;
       cin.clear();
       cin >> terminal;
-      int weight = atoi(terminal);
-      REME(matrix, vertices, vLength, weight);
+      int first = atoi(terminal);
+      cout << "enter 2nd vertex (y): " << endl;
+      cin.clear();
+      cin >> terminal;
+      int second = atoi(terminal);
+      REME(matrix, vertices, first, second);
     }else if(!strcmp(terminal, "FSP")){
       cout << "enter 1st vertex: " << endl;
       cin.clear();
@@ -87,9 +88,9 @@ int main(){
       cin.clear();
       cin >> terminal;
       int second = atoi(terminal);
-      FSP(matrix, vertices, vLength, first, second);
+      FSP(matrix, vertices, first, second);
     }else if(!strcmp(terminal, "PRINT")){
-      PRINT(matrix);
+      PRINT(matrix, vertices);
     }else if(!strcmp(terminal, "QUIT")){
       return 0;
     }else{
@@ -98,8 +99,12 @@ int main(){
   }
 }
 
-void PRINT(int** matrix){
-  cout << endl;
+void PRINT(int** matrix, int* vertices){
+  cout << "Vertices:" << endl;
+  for(int x = 0; x < 20; x++){
+    cout << vertices[x] << "  ";
+  }  
+  cout << endl << "Adjacency Matrix:" << endl;
   for(int i = 0; i < 20 ; i++){
     cout << endl;
     for(int j = 0; j < 20; j++){
@@ -109,28 +114,70 @@ void PRINT(int** matrix){
   }
 }
 
-void ADDV(int* &vertices, int num, int vLength){
-  cout << num << "." << vLength << endl;
-  for(int i = 0; i < vLength + 1; i++){
+void ADDV(int* &vertices, int num){
+  for(int i = 0; i < 20 + 1; i++){
     if(vertices[i] == -1){
       vertices[i] = num;
-      break;
+      return;
     }
+  }
+  cout << "Maximum number of vertices reached" << endl;
+}
+
+void ADDE(int** &matrix, int* vertices, int first, int second, int weight){
+  int fi = -1;
+  int si = -1;
+  for(int i = 0; i < 20; i++){
+    if(vertices[i] == first){
+      fi = i;
+    }
+    if(vertices[i] == second){
+      si = i;
+    }
+  }
+  if(fi == -1 || si == -1){
+    cout << "One of the vertices does not exist" << endl;
+  }else{
+    matrix[si][fi] = weight;
   }
 }
 
-void ADDE(int** &matrix, int* vertices, int vLength, int first, int second, int weight){
-
+void REMV(int** &matrix, int* &vertices, int num){
+  for(int i = 0; i < 20; i++){
+    if(vertices[i] == num){
+      vertices[i] = -1;
+      for(int j = 0; j < 20; j++){
+        matrix[j][i] = -1;
+      }
+      return;
+    }
+  }
+  cout << "Vertice not in matrix!" << endl;
 }
 
-void REMV(int** &matrix, int* &vertices, int vLength, int num){
-
+void REME(int** &matrix, int* vertices, int first, int second){
+  int x = -1;
+  int y = -1;
+  for(int i = 0; i < 20; i++){
+    if(vertices[i] == first){
+      x = i;
+    }
+  }
+  for(int i = 0; i < 20; i++){
+    if(vertices[i] == second){
+      y = i;
+    }
+  }
+  if(x == -1 || y == -1){
+    cout << "One of the vertices does not exist!" << endl;
+  }
+  if(matrix[y][x] != -1){
+    matrix[y][x] = -1;
+  }else{
+    cout << "No edge between those vertices!" << endl;
+  }
 }
 
-void REME(int** &matrix, int* vertices, int vLength, int weight){
-
-}
-
-void FSP(int** matrix, int* vertices, int vLength, int first, int second){
-
+void FSP(int** matrix, int* vertices, int first, int second){
+  
 }
