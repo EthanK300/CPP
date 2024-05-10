@@ -2,6 +2,7 @@
 #include <fstream>
 #include <cstring>
 #include <vector>
+#include <climits>
 
 using namespace std;
 
@@ -10,12 +11,38 @@ Author: Ethan K
 graph creator eeeee
  */
 
+class Node{
+public:
+  Node(int a){
+    data = a;
+    next = NULL;
+  }
+
+  void setNext(Node* node){
+    next = node;
+  }
+
+  Node* getNext(){
+    return next;
+  }
+
+  int getData(){
+    return data;
+  }
+  
+protected:
+  int data;
+  int dist;
+  Node* next;
+};
+
 void PRINT(int** matrix, int* vertices);
 void ADDV(int* &vertices, int num);
 void ADDE(int** &matrix, int* vertices, int weight, int first, int second);
 void REMV(int** &matrix, int* &vertices, int num);
 void REME(int** &matrix, int* vertices, int first, int second);
 void FSP(int** matrix, int* vertices, int first, int second);
+int find(int* vertices, int value);
 
 int main(){
   int** matrix = new int*[20];
@@ -56,6 +83,7 @@ int main(){
       int weight = atoi(terminal);
       cout << "enter 1st vertex (x): " << endl;
       cin.clear();
+
       cin >> terminal;
       int first = atoi(terminal);
       cout << "enter 2nd vertex (y): " << endl;
@@ -125,16 +153,8 @@ void ADDV(int* &vertices, int num){
 }
 
 void ADDE(int** &matrix, int* vertices, int first, int second, int weight){
-  int fi = -1;
-  int si = -1;
-  for(int i = 0; i < 20; i++){
-    if(vertices[i] == first){
-      fi = i;
-    }
-    if(vertices[i] == second){
-      si = i;
-    }
-  }
+  int fi = find(vertices, first);
+  int si = find(vertices, second);
   if(fi == -1 || si == -1){
     cout << "One of the vertices does not exist" << endl;
   }else{
@@ -156,18 +176,8 @@ void REMV(int** &matrix, int* &vertices, int num){
 }
 
 void REME(int** &matrix, int* vertices, int first, int second){
-  int x = -1;
-  int y = -1;
-  for(int i = 0; i < 20; i++){
-    if(vertices[i] == first){
-      x = i;
-    }
-  }
-  for(int i = 0; i < 20; i++){
-    if(vertices[i] == second){
-      y = i;
-    }
-  }
+  int x = find(vertices, first);
+  int y = find(vertices, second);
   if(x == -1 || y == -1){
     cout << "One of the vertices does not exist!" << endl;
   }
@@ -178,6 +188,64 @@ void REME(int** &matrix, int* vertices, int first, int second){
   }
 }
 
+int find(int* vertices, int value){
+  for(int i = 0; i < 20; i++){
+    if(vertices[i] == value){
+      return i;
+    }
+  }
+  return -1;
+}
+
+int small(int* vertices){
+  int min = INT_MAX;
+  for(int i = 0; i < 20; i++){
+    if(vertices[i] < min){
+      min = vertices[i];
+    }
+  }
+  return find(vertices, min);
+}
+
 void FSP(int** matrix, int* vertices, int first, int second){
-  
+  if(first == -1 || second == -1){
+    cout << "Can't find distance to nothing!" << endl;
+    return;
+  }
+  Node** previous = new Node*[20];
+  bool active = true;
+  for(int i = 0; i < 20; i++){
+    Node* node = new Node(vertices[i]);
+  }
+  int* visited = new int[20];
+  int* unvisited = new int[20];
+  int* dist = new int[20];
+  for(int i = 0; i < 20; i++){
+    dist[i] = INT_MAX;
+    unvisited[i] = vertices[i];
+  }
+  dist[find(vertices, first)] = 0;
+  while(active){
+    int cvi = small(vertices);
+    int cv = vertices[cvi];
+    for(int i = 0; i < 20; i++){
+      if(matrix[cvi][i] == -1 || (find(unvisited, i) == -1)){
+	continue;
+      }else{
+	int conv = vertices[i];
+	if(dist[i] > (dist[cvi] + matrix[cvi][i])){
+	  dist[i] = dist[cvi] + matrix[cvi][i];
+	  previous[i]->setNext(previous[cvi]);
+	}
+      }
+    }
+    active = false;
+    for(int j = 0; j < 20; j++){
+      if(visited[j] == -1){
+	visited[j] = cv;
+	j == 20 ? active = false : active = true;
+	break;
+      }
+    }
+  }
 }
