@@ -158,7 +158,7 @@ void ADDE(int** &matrix, int* vertices, int first, int second, int weight){
   if(fi == -1 || si == -1){
     cout << "One of the vertices does not exist" << endl;
   }else{
-    matrix[si][fi] = weight;
+    matrix[fi][si] = weight;
   }
 }
 
@@ -197,10 +197,10 @@ int find(int* vertices, int value){
   return -1;
 }
 
-int small(int* vertices){
+int small(int* vertices, int* unvisited){
   int min = INT_MAX;
   for(int i = 0; i < 20; i++){
-    if(vertices[i] < min){
+    if((unvisited[i] != -1) && (vertices[i] < min)){
       min = vertices[i];
     }
   }
@@ -208,44 +208,64 @@ int small(int* vertices){
 }
 
 void FSP(int** matrix, int* vertices, int first, int second){
-  if(first == -1 || second == -1){
+  if(find(vertices, first) == -1 || find(vertices, second) == -1){
     cout << "Can't find distance to nothing!" << endl;
     return;
   }
   Node** previous = new Node*[20];
   bool active = true;
+  bool on = true;
   for(int i = 0; i < 20; i++){
     Node* node = new Node(vertices[i]);
+    previous[i] = node;
   }
   int* visited = new int[20];
   int* unvisited = new int[20];
   int* dist = new int[20];
   for(int i = 0; i < 20; i++){
     dist[i] = INT_MAX;
+    visited[i] = -1;
     unvisited[i] = vertices[i];
   }
   dist[find(vertices, first)] = 0;
-  while(active){
-    int cvi = small(vertices);
+  while(active && on){
+    int cvi = small(dist, unvisited);
     int cv = vertices[cvi];
+    cout << "working on vertex: " << cv << endl;
     for(int i = 0; i < 20; i++){
-      if(matrix[cvi][i] == -1 || (find(unvisited, i) == -1)){
+      if(matrix[cvi][i] == -1){
+	cout << "skipped " << cvi << "," << i << " with edge " << matrix[cvi][i] << endl;
 	continue;
       }else{
-	int conv = vertices[i];
+	cout << "working on edge between " << cv << " and " << vertices[i] << ", with current distance " << dist[i] << " and comparing distance " << dist[cvi] + matrix[cvi][i] << endl;
 	if(dist[i] > (dist[cvi] + matrix[cvi][i])){
 	  dist[i] = dist[cvi] + matrix[cvi][i];
 	  previous[i]->setNext(previous[cvi]);
+	  cout << "found smaller path for " << cv << " and " << vertices[i] << ", setting " << vertices[i] << "'s previous to " << vertices[cvi] << endl;
 	}
       }
     }
+    cout << "here" << endl;
     active = false;
     for(int j = 0; j < 20; j++){
       if(visited[j] == -1){
 	visited[j] = cv;
-	j == 20 ? active = false : active = true;
+	unvisited[cvi] = -1;
+	j == 19 ? active = false : active = true;
 	break;
       }
     }
+    on = false;
+    for(int k = 0; k < 20; k++){
+      if(unvisited[k] != -1){
+	on = true;
+      }
+    }
+  }
+  Node* currentNode = previous[find(vertices, second)];
+  cout << "shortest path is through: " << endl;
+  while(currentNode != NULL){
+    cout << "Vertice " << currentNode->getData() << "," << endl;
+    currentNode = currentNode->getNext();
   }
 }
