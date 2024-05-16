@@ -197,14 +197,60 @@ int find(int* vertices, int value){
   return -1;
 }
 
-int small(int* vertices, int* unvisited){
+int small(int* distances, int* unvisited, int* vertices){
   int min = INT_MAX;
   for(int i = 0; i < 20; i++){
-    if((unvisited[i] != -1) && (vertices[i] < min)){
-      min = vertices[i];
+    if(unvisited[i] != -1){
+      int o = find(vertices, unvisited[i]);
+      cout << "vertice: " << vertices[o] << endl;
+      if(distances[o] < min){
+	min = distances[o];
+      }
     }
   }
-  return find(vertices, min);
+  if(min == INT_MAX){
+    return -1;
+  }else{
+    return find(distances, min);
+  }
+}
+
+int* trace(int** matrix, int* vertices, int num, int* accessible){
+  int i = find(vertices, num);
+  for(int j = 0; j < 20; j++){
+    if(matrix[i][j] != -1 && (find(accessible, vertices[j]) == -1)){
+      for(int k = 0; k < 20; k++){
+	if(accessible[k] == -1){
+	  accessible[k] = vertices[j];
+	  accessible = trace(matrix, vertices, vertices[j], accessible);
+	  break;
+	}
+      }
+    }
+  }
+  return accessible;
+}
+
+int* unvisit(int** matrix, int* vertices, int first, int second){
+  bool fh = false;
+  bool sh = false;
+  for(int i = 0; i < 20; i++){
+    if(vertices[i] == fh && vertices[i] == sh){
+      cout << "Distance to the same point is 0!" << endl;
+      return NULL;
+    }else if(vertices[i] == fh){
+      fh = true;
+    }else if(vertices[i] == sh){
+      sh = true;
+    }
+  }
+  int* unvisited = new int[20];
+  for(int i = 0; i < 20; i++){
+    unvisited[i] = -1;
+  }
+  unvisited[0] = first;
+  unvisited = trace(matrix, vertices, first, unvisited);
+  return unvisited;
 }
 
 void FSP(int** matrix, int* vertices, int first, int second){
@@ -212,6 +258,14 @@ void FSP(int** matrix, int* vertices, int first, int second){
     cout << "Can't find distance to nothing!" << endl;
     return;
   }
+  int* unvisited = unvisit(matrix, vertices, first, second);
+  if(unvisited == NULL){
+    return;
+  }
+  for(int h = 0; h < 20; h++){
+    cout << unvisited[h] << "  ";
+  }
+  cout << endl;
   Node** previous = new Node*[20];
   bool active = true;
   bool on = true;
@@ -220,17 +274,23 @@ void FSP(int** matrix, int* vertices, int first, int second){
     previous[i] = node;
   }
   int* visited = new int[20];
-  int* unvisited = new int[20];
   int* dist = new int[20];
   for(int i = 0; i < 20; i++){
     dist[i] = INT_MAX;
     visited[i] = -1;
-    unvisited[i] = vertices[i];
   }
   dist[find(vertices, first)] = 0;
+  int lv = 0;
   while(active && on){
-    int cvi = small(dist, unvisited);
+    int cvi = small(dist, unvisited, vertices);
     int cv = vertices[cvi];
+    if(lv == 0){
+      lv = cv;
+    }else if(cv == lv){
+      cout << "No path found!" << endl;
+      return;
+    }
+    cout << "index: " << cvi << " vertice: " << cv << endl;
     cout << "working on vertex: " << cv << endl;
     for(int i = 0; i < 20; i++){
       if(matrix[cvi][i] == -1){
