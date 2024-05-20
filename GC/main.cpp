@@ -199,19 +199,21 @@ int find(int* vertices, int value){
 
 int small(int* distances, int* unvisited, int* vertices){
   int min = INT_MAX;
+  int mini = 0;
   for(int i = 0; i < 20; i++){
     if(unvisited[i] != -1){
       int o = find(vertices, unvisited[i]);
       cout << "vertice: " << vertices[o] << endl;
       if(distances[o] < min){
 	min = distances[o];
+	mini = o;
       }
     }
   }
   if(min == INT_MAX){
     return -1;
   }else{
-    return find(distances, min);
+    return mini;
   }
 }
 
@@ -262,10 +264,6 @@ void FSP(int** matrix, int* vertices, int first, int second){
   if(unvisited == NULL){
     return;
   }
-  for(int h = 0; h < 20; h++){
-    cout << unvisited[h] << "  ";
-  }
-  cout << endl;
   Node** previous = new Node*[20];
   bool active = true;
   bool on = true;
@@ -282,20 +280,34 @@ void FSP(int** matrix, int* vertices, int first, int second){
   dist[find(vertices, first)] = 0;
   int lv = 0;
   while(active && on){
+    PRINT(matrix, vertices);
+
+    cout << "Unvisited list: ";
+    for(int h = 0; h < 20; h++){
+      cout << unvisited[h] << "  ";
+    }
+    cout << endl << "Distances:" << endl;
+    for(int h = 0; h < 20; h++){
+      cout << dist[h] << "  ";
+    }
+    cout << endl << "vertices" << endl;
+    for(int h = 0; h < 20; h++){
+      cout << vertices[h] << "  ";
+    }
+    cout << endl;
+    
     int cvi = small(dist, unvisited, vertices);
     int cv = vertices[cvi];
+    cout << "Current vertex: " << cv << " at index " << cvi << endl;
     if(lv == 0){
       lv = cv;
     }else if(cv == lv){
       cout << "No path found!" << endl;
       return;
     }
-    cout << "index: " << cvi << " vertice: " << cv << endl;
-    cout << "working on vertex: " << cv << endl;
     for(int i = 0; i < 20; i++){
       if(matrix[cvi][i] == -1){
-	cout << "skipped " << cvi << "," << i << " with edge " << matrix[cvi][i] << endl;
-	continue;
+        continue;
       }else{
 	cout << "working on edge between " << cv << " and " << vertices[i] << ", with current distance " << dist[i] << " and comparing distance " << dist[cvi] + matrix[cvi][i] << endl;
 	if(dist[i] > (dist[cvi] + matrix[cvi][i])){
@@ -307,10 +319,10 @@ void FSP(int** matrix, int* vertices, int first, int second){
     }
     cout << "here" << endl;
     active = false;
+    unvisited[find(unvisited, cv)] = -1;
     for(int j = 0; j < 20; j++){
       if(visited[j] == -1){
 	visited[j] = cv;
-	unvisited[cvi] = -1;
 	j == 19 ? active = false : active = true;
 	break;
       }
@@ -326,6 +338,13 @@ void FSP(int** matrix, int* vertices, int first, int second){
   cout << "shortest path is through: " << endl;
   while(currentNode != NULL){
     cout << "Vertice " << currentNode->getData() << "," << endl;
-    currentNode = currentNode->getNext();
+    if(currentNode->getNext() != NULL){
+      currentNode = currentNode->getNext();
+    }else{
+      if(currentNode->getData() != first){
+	cout << "Couldn't find a path!" << endl;
+      }
+      return;
+    }
   }
 }
