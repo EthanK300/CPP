@@ -336,14 +336,17 @@ void FSP(int** matrix, int* vertices, int first, int second){
   }
   Node* currentNode = previous[find(vertices, second)];
   cout << "shortest path is through: " << endl;
+  int count = 0;
   while(currentNode != NULL){
     cout << "Vertice " << currentNode->getData() << "," << endl;
+    count++;
     if(currentNode->getNext() != NULL){
       currentNode = currentNode->getNext();
     }else{
       if(currentNode->getData() != first){
 	cout << "Couldn't find a path!" << endl;
       }
+      cout << "Distance: " << count << endl;
       return;
     }
   }
